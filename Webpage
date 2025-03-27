@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Sirawat Supawattanakul</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+        header {
+            padding: 20px 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sirawat Supawattanakul</h1>
+            <p>Junior Architect | Portfolio Showcase</p>
+        </header>
+        <section class="gallery">
+            <img src="https://via.placeholder.com/300" alt="Project 1">
+            <img src="https://via.placeholder.com/300" alt="Project 2">
+            <img src="https://via.placeholder.com/300" alt="Project 3">
+            <img src="https://via.placeholder.com/300" alt="Project 4">
+        </section>
+    </div>
+</body>
+</html>
