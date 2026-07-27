@@ -47,7 +47,7 @@ npm run icons          # regenerate PWA icons into public/icons/
 This step cannot be automated — the workflow's `GITHUB_TOKEN` is not
 permitted to turn Pages on, so `configure-pages` fails with "Get Pages
 site failed" until the switch is flipped by hand. After that, the next
-push deploys and the live URL is `https://<owner>.github.io/SirawatS/`.
+push deploys and the live URL is `https://<owner>.github.io/<repo>/`.
 You can also deploy on demand from the Actions tab ("Deploy to GitHub
 Pages" → Run workflow).
 
@@ -59,7 +59,7 @@ Settings → Environments → github-pages → Deployment branches.
 Two Pages-specific details the workflow handles for you:
 
 - Pages serves from a subpath, so the build runs with
-  `BASE_PATH=/SirawatS/`. Vite's `base`, the router's `basename`, and the
+  `BASE_PATH=/<repo>/`. Vite's `base`, the router's `basename`, and the
   manifest's `start_url`/`scope` all follow that variable, so nothing is
   hard-coded.
 - Pages has no rewrite rules, so the workflow copies `index.html` to

@@ -3,8 +3,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// Root ('/') by default (Vercel/Netlify). GitHub Pages serves from a
-// subpath, so its workflow sets BASE_PATH=/SirawatS/.
+// Root ('/') by default (Vercel/Netlify). GitHub Pages serves a project
+// site from /<repo>/, so its workflow sets BASE_PATH to match.
 const base = process.env.BASE_PATH ?? '/';
 
 export default defineConfig({

@@ -28,7 +28,8 @@ jobs:
       - run: npm run validate-content
       - run: npm test
       - name: Build
-        # GitHub Pages serves this repo from /SirawatS/.
+        # Pages serves a project site from /<repo>/, so the base path
+        # tracks the repo name rather than being hard-coded.
         run: BASE_PATH=/${{ github.event.repository.name }}/ npm run build
       - name: Add SPA fallback and disable Jekyll
         # Pages has no rewrite rules: a 404.html copy of index.html makes
