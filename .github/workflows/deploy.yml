@@ -36,11 +36,9 @@ jobs:
         run: |
           cp dist/index.html dist/404.html
           touch dist/.nojekyll
+      # Requires a one-time repo setting, since GITHUB_TOKEN cannot enable
+      # Pages itself: Settings → Pages → Source: GitHub Actions.
       - uses: actions/configure-pages@v5
-        # Turns Pages on (source: GitHub Actions) the first time this runs,
-        # so no manual repo setting is needed.
-        with:
-          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

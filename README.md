@@ -39,13 +39,22 @@ npm run icons          # regenerate PWA icons into public/icons/
 ### GitHub Pages (primary)
 
 `.github/workflows/deploy.yml` builds and publishes on every push to
-`main` or the development branch. Enable it once, in the repo:
+`main` or the development branch.
 
+**One-time setup, which must be done by the repo owner:**
 **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 
-That's the whole setup — the next push deploys, and the live URL is
-`https://<owner>.github.io/SirawatS/`. You can also trigger a deploy by
-hand from the Actions tab ("Deploy to GitHub Pages" → Run workflow).
+This step cannot be automated — the workflow's `GITHUB_TOKEN` is not
+permitted to turn Pages on, so `configure-pages` fails with "Get Pages
+site failed" until the switch is flipped by hand. After that, the next
+push deploys and the live URL is `https://<owner>.github.io/SirawatS/`.
+You can also deploy on demand from the Actions tab ("Deploy to GitHub
+Pages" → Run workflow).
+
+If the deploy job is then rejected with an environment protection error,
+the `github-pages` environment is restricted to the default branch:
+either merge the branch into `main`, or add the branch under
+Settings → Environments → github-pages → Deployment branches.
 
 Two Pages-specific details the workflow handles for you:
 
