@@ -3,7 +3,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// Root ('/') by default (Vercel/Netlify). GitHub Pages serves from a
+// subpath, so its workflow sets BASE_PATH=/SirawatS/.
+const base = process.env.BASE_PATH ?? '/';
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     VitePWA({
@@ -13,7 +18,7 @@ export default defineConfig({
       includeAssets: ['icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'],
       workbox: {
         globPatterns: ['**/*.{js,css,html,woff2,json,png,svg}'],
-        navigateFallback: '/index.html',
+        navigateFallback: `${base}index.html`,
       },
       manifest: {
         name: 'Nihongo Daily',
@@ -23,11 +28,17 @@ export default defineConfig({
         orientation: 'portrait',
         theme_color: '#18181b',
         background_color: '#fafafa',
-        start_url: '/',
+        start_url: base,
+        scope: base,
         icons: [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: `${base}icons/icon-192.png`, sizes: '192x192', type: 'image/png' },
+          { src: `${base}icons/icon-512.png`, sizes: '512x512', type: 'image/png' },
+          {
+            src: `${base}icons/maskable-512.png`,
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
         ],
       },
     }),

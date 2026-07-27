@@ -36,7 +36,28 @@ npm run icons          # regenerate PWA icons into public/icons/
 
 ## Deploying
 
-### Vercel (primary)
+### GitHub Pages (primary)
+
+`.github/workflows/deploy.yml` builds and publishes on every push to
+`main` or the development branch. Enable it once, in the repo:
+
+**Settings → Pages → Build and deployment → Source: GitHub Actions.**
+
+That's the whole setup — the next push deploys, and the live URL is
+`https://<owner>.github.io/SirawatS/`. You can also trigger a deploy by
+hand from the Actions tab ("Deploy to GitHub Pages" → Run workflow).
+
+Two Pages-specific details the workflow handles for you:
+
+- Pages serves from a subpath, so the build runs with
+  `BASE_PATH=/SirawatS/`. Vite's `base`, the router's `basename`, and the
+  manifest's `start_url`/`scope` all follow that variable, so nothing is
+  hard-coded.
+- Pages has no rewrite rules, so the workflow copies `index.html` to
+  `404.html`. That is what makes deep links like `/settings` load the app
+  instead of a GitHub 404 page.
+
+### Vercel
 
 Either connect the GitHub repo to Vercel (it picks up `vercel.json`:
 SPA rewrite, immutable `/assets/*` cache, `no-cache` on `sw.js` /
@@ -47,7 +68,7 @@ npm run build
 npx vercel --prod
 ```
 
-### Netlify (fallback)
+### Netlify
 
 `netlify.toml` carries the same redirect and header rules:
 
