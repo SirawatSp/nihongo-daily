@@ -4,19 +4,29 @@ A local-first, single-user PWA for daily Japanese practice — built for one
 person who opens it every day on a phone, aiming at travel-usable Japanese
 around JLPT N4–N3.
 
-One button starts an ~18-minute session of five blocks:
+One button starts an ~18-minute session of six blocks:
 
 1. **Kana drill** — 20 items, weighted toward visually confusable pairs
    (さ/ち, ぬ/め, わ/な, る/ろ, れ/ね, シ/ツ, ン/ソ, ク/ワ). Characters
    graduate out of rotation at >90% accuracy over 20+ reps.
 2. **Vocab SRS** — SM-2-lite spaced repetition over travel-focused N5/N4
    vocabulary, every card with an example sentence and TTS.
-3. **Listening** — TTS plays a sentence; pick the meaning; replay and 0.75×
+3. **Kanji writing** — draw the character stroke by stroke with a finger or
+   mouse. Each stroke is checked against real stroke-order data for start
+   point, end point, direction, and shape, so you cannot quietly learn a
+   character backwards. Characters are drawn from the vocabulary already in
+   your SRS, so writing reinforces the words you are learning.
+4. **Listening** — TTS plays a sentence; pick the meaning; replay and 0.75×
    slow toggle.
-4. **Speaking** — speak the answer to an English prompt; speech recognition
+5. **Speaking** — speak the answer to an English prompt; speech recognition
    plus fuzzy Japanese matching. Never blocks progress.
-5. **Reading** — a short graded passage with furigana toggle, tap-for-gloss,
+6. **Reading** — a short graded passage with furigana toggle, tap-for-gloss,
    and one comprehension question.
+
+There is also a **Kanji** tab for focused writing practice outside the daily
+session: browse all 325 characters, filter by JLPT level, search by meaning
+or reading, and tap any character to write it. Tiles are coloured by how
+accurately you write them.
 
 Everything is stored in IndexedDB on the device. No accounts, no backend,
 no telemetry, fully offline after the first load.
@@ -32,7 +42,13 @@ npm run lint           # eslint
 npm run typecheck      # tsc --noEmit
 npm run validate-content   # zod-validate all content JSON (runs in CI)
 npm run icons          # regenerate PWA icons into public/icons/
+npm run build-kanji    # regenerate src/data/kanji.json (needs network)
 ```
+
+`build-kanji` is a one-off generator, deliberately outside CI and the normal
+build: it downloads KanjiVG and KANJIDIC2 and writes the stroke data for
+exactly the kanji used in `vocab.json`. Re-run it only after adding vocabulary
+that introduces new characters, then commit the regenerated JSON.
 
 ## Deploying
 
@@ -126,6 +142,22 @@ daily new-card cap, default 10/day, adjustable in Settings).
 Settings → Export progress writes a JSON file with all cards, kana stats,
 sessions, favorites, and settings. Import restores it exactly — use this
 when switching phones.
+
+## Content credits
+
+The kanji writing trainer is built on two openly licensed datasets, both
+bundled into `src/data/kanji.json` so the app works offline:
+
+- **Stroke paths and stroke order** — [KanjiVG](http://kanjivg.tagaini.net)
+  by Ulrich Apel, licensed
+  [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/).
+- **Kanji meanings and on/kun readings** — KANJIDIC2 by the
+  [Electronic Dictionary Research and Development Group](http://www.edrdg.org/),
+  licensed CC BY-SA.
+
+Because both are share-alike, the bundled kanji data stays under CC BY-SA if
+you redistribute it. The vocabulary, grammar, dialogue, and reading content
+was written for this project.
 
 ## Browser notes
 

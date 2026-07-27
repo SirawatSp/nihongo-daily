@@ -4,7 +4,19 @@ import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
 import type { CardState } from './srs';
 import type { KanaStat } from './kana';
 
-export type BlockId = 'kana' | 'vocab' | 'listening' | 'speaking' | 'reading';
+export type BlockId = 'kana' | 'vocab' | 'kanji' | 'listening' | 'speaking' | 'reading';
+
+/** Per-character handwriting progress, keyed by the kanji itself. */
+export interface KanjiStat {
+  char: string;
+  attempts: number;
+  completed: number;
+  /** Best character accuracy achieved, 0..1. */
+  best: number;
+  /** Mean accuracy of the most recent attempts. */
+  recent: number;
+  lastSeen: number;
+}
 
 export interface SessionRecord {
   date: string; // YYYY-MM-DD
@@ -25,6 +37,12 @@ export interface Settings {
   speechRate: number;
   theme: 'system' | 'light' | 'dark';
   furiganaDefault: boolean;
+  /** Kanji writing: show the guide outline for the next stroke. */
+  strokeHints: boolean;
+  /** Kanji writing: hold strokes to a tighter standard. */
+  strictStrokes: boolean;
+  /** Kanji characters practised per writing block. */
+  kanjiPerSession: number;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -33,18 +51,22 @@ export const DEFAULT_SETTINGS: Settings = {
   speechRate: 1,
   theme: 'system',
   furiganaDefault: true,
+  strokeHints: true,
+  strictStrokes: false,
+  kanjiPerSession: 4,
 };
 
 interface NihongoDB extends DBSchema {
   cards: { key: string; value: CardState; indexes: { 'by-due': number } };
   kanaStats: { key: string; value: KanaStat };
+  kanjiStats: { key: string; value: KanjiStat };
   sessions: { key: string; value: SessionRecord };
   settings: { key: string; value: unknown };
   favorites: { key: string; value: Favorite };
 }
 
 export const DB_NAME = 'nihongo-daily';
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
 let dbPromise: Promise<IDBPDatabase<NihongoDB>> | null = null;
 
@@ -61,7 +83,11 @@ function migrate(db: IDBPDatabase<NihongoDB>, oldVersion: number): void {
     db.createObjectStore('settings');
     db.createObjectStore('favorites', { keyPath: 'id' });
   }
-  // Future versions: add `if (oldVersion < 2) { ... }` here.
+  if (oldVersion < 2) {
+    // Kanji handwriting practice. Purely additive — every existing store is
+    // left untouched, so vocab/kana/streak progress carries over intact.
+    db.createObjectStore('kanjiStats', { keyPath: 'char' });
+  }
 }
 
 export function getDb(): Promise<IDBPDatabase<NihongoDB>> {
@@ -93,6 +119,36 @@ export async function getAllKanaStats(): Promise<Map<string, KanaStat>> {
 }
 export async function putKanaStat(stat: KanaStat): Promise<void> {
   await (await getDb()).put('kanaStats', stat);
+}
+
+// --- kanji stats ---
+export async function getAllKanjiStats(): Promise<Map<string, KanjiStat>> {
+  const all = await (await getDb()).getAll('kanjiStats');
+  return new Map(all.map((s) => [s.char, s]));
+}
+
+/** Record one completed character attempt, blending into a recent average. */
+export async function recordKanjiAttempt(char: string, accuracy: number): Promise<void> {
+  const db = await getDb();
+  const prev = await db.get('kanjiStats', char);
+  const next: KanjiStat = prev
+    ? {
+        char,
+        attempts: prev.attempts + 1,
+        completed: prev.completed + 1,
+        best: Math.max(prev.best, accuracy),
+        recent: Math.round((prev.recent * 0.6 + accuracy * 0.4) * 100) / 100,
+        lastSeen: Date.now(),
+      }
+    : {
+        char,
+        attempts: 1,
+        completed: 1,
+        best: accuracy,
+        recent: accuracy,
+        lastSeen: Date.now(),
+      };
+  await db.put('kanjiStats', next);
 }
 
 // --- sessions ---
@@ -136,6 +192,8 @@ export interface ExportedData {
   exportedAt: string;
   cards: CardState[];
   kanaStats: KanaStat[];
+  /** Added in v2; absent in backups taken from a v1 database. */
+  kanjiStats?: KanjiStat[];
   sessions: SessionRecord[];
   settings: Settings;
   favorites: Favorite[];
@@ -148,6 +206,7 @@ export async function exportAll(): Promise<ExportedData> {
     exportedAt: new Date().toISOString(),
     cards: await db.getAll('cards'),
     kanaStats: await db.getAll('kanaStats'),
+    kanjiStats: await db.getAll('kanjiStats'),
     sessions: await db.getAll('sessions'),
     settings: await getSettings(),
     favorites: await db.getAll('favorites'),
@@ -156,15 +215,20 @@ export async function exportAll(): Promise<ExportedData> {
 
 export async function importAll(data: ExportedData): Promise<void> {
   const db = await getDb();
-  const tx = db.transaction(['cards', 'kanaStats', 'sessions', 'settings', 'favorites'], 'readwrite');
+  const tx = db.transaction(
+    ['cards', 'kanaStats', 'kanjiStats', 'sessions', 'settings', 'favorites'],
+    'readwrite',
+  );
   await Promise.all([
     tx.objectStore('cards').clear(),
     tx.objectStore('kanaStats').clear(),
+    tx.objectStore('kanjiStats').clear(),
     tx.objectStore('sessions').clear(),
     tx.objectStore('favorites').clear(),
   ]);
   for (const c of data.cards) void tx.objectStore('cards').put(c);
   for (const k of data.kanaStats) void tx.objectStore('kanaStats').put(k);
+  for (const k of data.kanjiStats ?? []) void tx.objectStore('kanjiStats').put(k);
   for (const s of data.sessions) void tx.objectStore('sessions').put(s);
   for (const f of data.favorites) void tx.objectStore('favorites').put(f);
   void tx.objectStore('settings').put({ ...DEFAULT_SETTINGS, ...data.settings }, 'app');

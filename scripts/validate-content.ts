@@ -7,6 +7,7 @@ import { z } from 'zod';
 import {
   dialogueFileSchema,
   grammarFileSchema,
+  kanjiFileSchema,
   readingFileSchema,
   vocabFileSchema,
 } from '../src/data/schema';
@@ -26,14 +27,16 @@ function validate(file: string, schema: z.ZodTypeAny): void {
     }
     return;
   }
-  const entries = result.data as { id: string }[];
-  const ids = new Set<string>();
+  // kanji.json is keyed by `char`; the others by `id`.
+  const entries = result.data as { id?: string; char?: string }[];
+  const keys = new Set<string>();
   for (const entry of entries) {
-    if (ids.has(entry.id)) {
+    const key = entry.id ?? entry.char ?? '';
+    if (keys.has(key)) {
       failed = true;
-      console.error(`✗ ${file}: duplicate id "${entry.id}"`);
+      console.error(`✗ ${file}: duplicate key "${key}"`);
     }
-    ids.add(entry.id);
+    keys.add(key);
   }
   console.log(`✓ ${file}: ${entries.length} entries valid`);
 }
@@ -42,6 +45,7 @@ validate('vocab.json', vocabFileSchema);
 validate('grammar.json', grammarFileSchema);
 validate('dialogues.json', dialogueFileSchema);
 validate('readings.json', readingFileSchema);
+validate('kanji.json', kanjiFileSchema);
 
 if (failed) {
   console.error('\nContent validation FAILED.');

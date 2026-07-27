@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "validate-content": "tsx scripts/validate-content.ts",
-    "icons": "tsx scripts/make-icons.ts"
+    "icons": "tsx scripts/make-icons.ts",
+    "build-kanji": "tsx scripts/build-kanji-data.ts"
   },
   "dependencies": {
     "idb": "^8.0.0",

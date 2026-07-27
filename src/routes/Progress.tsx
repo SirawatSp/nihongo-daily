@@ -1,12 +1,21 @@
 import { useEffect, useState } from 'react';
 import vocabRaw from '../data/vocab.json';
 import type { VocabEntry } from '../data/schema';
-import { getAllCards, getAllKanaStats, getAllSessions, type SessionRecord } from '../lib/db';
+import kanjiRaw from '../data/kanji.json';
+import {
+  getAllCards,
+  getAllKanaStats,
+  getAllKanjiStats,
+  getAllSessions,
+  type KanjiStat,
+  type SessionRecord,
+} from '../lib/db';
 import { KANA_TABLE, type KanaStat } from '../lib/kana';
 import { currentStreak, dateKey, lastNDays } from '../lib/streak';
 import { Card } from '../components/ui';
 
 const vocab = vocabRaw as VocabEntry[];
+const kanjiTotal = (kanjiRaw as unknown[]).length;
 
 function KanaHeatmap({ stats }: { stats: Map<string, KanaStat> }) {
   return (
@@ -90,6 +99,7 @@ function AccuracyTrend({ sessions }: { sessions: SessionRecord[] }) {
 export default function Progress() {
   const [cards, setCards] = useState({ known: 0, learning: 0, fresh: 0 });
   const [kanaStats, setKanaStats] = useState<Map<string, KanaStat>>(new Map());
+  const [kanjiStats, setKanjiStats] = useState<Map<string, KanjiStat>>(new Map());
   const [sessions, setSessions] = useState<SessionRecord[]>([]);
 
   useEffect(() => {
@@ -102,8 +112,12 @@ export default function Progress() {
       });
     });
     void getAllKanaStats().then(setKanaStats);
+    void getAllKanjiStats().then(setKanjiStats);
     void getAllSessions().then(setSessions);
   }, []);
+
+  const kanjiWritten = [...kanjiStats.values()].filter((s) => s.completed > 0);
+  const kanjiSolid = kanjiWritten.filter((s) => s.recent >= 0.85).length;
 
   const streak = currentStreak(sessions.map((s) => s.date), dateKey(new Date()));
 
@@ -124,6 +138,25 @@ export default function Progress() {
           <div>
             <p className="text-2xl font-semibold">{cards.fresh}</p>
             <p className="text-xs text-zinc-500">new</p>
+          </div>
+        </div>
+      </Card>
+      <Card>
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-400">
+          Kanji writing
+        </h2>
+        <div className="flex justify-around text-center">
+          <div>
+            <p className="text-2xl font-semibold">{kanjiSolid}</p>
+            <p className="text-xs text-zinc-500">solid</p>
+          </div>
+          <div>
+            <p className="text-2xl font-semibold">{kanjiWritten.length - kanjiSolid}</p>
+            <p className="text-xs text-zinc-500">shaky</p>
+          </div>
+          <div>
+            <p className="text-2xl font-semibold">{kanjiTotal - kanjiWritten.length}</p>
+            <p className="text-xs text-zinc-500">unwritten</p>
           </div>
         </div>
       </Card>

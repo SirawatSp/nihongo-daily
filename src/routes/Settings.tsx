@@ -121,6 +121,52 @@ export default function Settings() {
       </Card>
 
       <Card>
+        <p className="mb-3 font-medium">Kanji writing</p>
+        <label htmlFor="kanji-count" className="mb-1 block text-sm">
+          Characters per session
+        </label>
+        <input
+          id="kanji-count"
+          type="number"
+          min={1}
+          max={20}
+          value={settings.kanjiPerSession}
+          onChange={(e) =>
+            update({ kanjiPerSession: Math.min(20, Math.max(1, Number(e.target.value) || 1)) })
+          }
+          className="mb-4 w-24 rounded-xl border border-zinc-200 bg-white px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+        />
+        <label className="flex min-h-11 items-center justify-between">
+          <span>
+            Stroke guides
+            <span className="block text-sm text-zinc-500">
+              Show the outline of the stroke you're on
+            </span>
+          </span>
+          <input
+            type="checkbox"
+            checked={settings.strokeHints}
+            onChange={(e) => update({ strokeHints: e.target.checked })}
+            className="h-5 w-5 shrink-0 accent-blue-600"
+          />
+        </label>
+        <label className="flex min-h-11 items-center justify-between">
+          <span>
+            Strict shapes
+            <span className="block text-sm text-zinc-500">
+              Hold strokes to a tighter standard
+            </span>
+          </span>
+          <input
+            type="checkbox"
+            checked={settings.strictStrokes}
+            onChange={(e) => update({ strictStrokes: e.target.checked })}
+            className="h-5 w-5 shrink-0 accent-blue-600"
+          />
+        </label>
+      </Card>
+
+      <Card>
         <p className="mb-2 font-medium">Appearance</p>
         <div role="group" aria-label="Theme" className="mb-4 flex gap-2">
           {(['system', 'light', 'dark'] as const).map((t) => (
@@ -177,6 +223,18 @@ export default function Settings() {
       <p className="px-2 text-xs text-zinc-400">
         Speech recognition works in Chrome and Edge; it is unavailable or unreliable on iOS Safari.
         Everything else works fully offline.
+      </p>
+
+      <p className="px-2 pb-2 text-xs text-zinc-400">
+        Kanji stroke order from{' '}
+        <a href="http://kanjivg.tagaini.net" className="underline">
+          KanjiVG
+        </a>{' '}
+        and readings from{' '}
+        <a href="http://www.edrdg.org/" className="underline">
+          KANJIDIC2
+        </a>
+        , both CC BY-SA.
       </p>
     </div>
   );

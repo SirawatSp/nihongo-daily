@@ -15,6 +15,16 @@
   :focus-visible {
     @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-zinc-50 dark:ring-offset-zinc-950;
   }
+  /* Stroke-order demonstration: traces the stroke from start to finish. */
+  @keyframes kanji-trace {
+    from {
+      stroke-dashoffset: 200;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

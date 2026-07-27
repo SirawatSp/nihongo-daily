@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { BLOCKS, useSession } from './useSession';
 import KanaDrill from './blocks/KanaDrill';
 import VocabSrs from './blocks/VocabSrs';
+import KanjiWriting from './blocks/KanjiWriting';
 import Listening from './blocks/Listening';
 import Speaking from './blocks/Speaking';
 import Reading from './blocks/Reading';
@@ -117,6 +118,7 @@ export default function SessionShell() {
       </div>
       {block.id === 'kana' && <KanaDrill {...common} />}
       {block.id === 'vocab' && <VocabSrs {...common} />}
+      {block.id === 'kanji' && <KanjiWriting {...common} />}
       {block.id === 'listening' && <Listening {...common} />}
       {block.id === 'speaking' && <Speaking {...common} />}
       {block.id === 'reading' && <Reading {...common} />}

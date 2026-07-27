@@ -6,6 +6,9 @@ import type { BlockId } from '../lib/db';
 export const BLOCKS: { id: BlockId; label: string }[] = [
   { id: 'kana', label: 'Kana' },
   { id: 'vocab', label: 'Vocab' },
+  // Writing comes straight after vocab so you draw the characters while the
+  // words you just reviewed are still fresh.
+  { id: 'kanji', label: 'Writing' },
   { id: 'listening', label: 'Listening' },
   { id: 'speaking', label: 'Speaking' },
   { id: 'reading', label: 'Reading' },
