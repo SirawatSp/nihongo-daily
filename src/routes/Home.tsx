@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllSessions, getSession } from '../lib/db';
+import { clearActiveSession, getActiveSession, getAllSessions, getSession, type ActiveSession } from '../lib/db';
 import { currentStreak, dateKey } from '../lib/streak';
-import { useSession } from '../session/useSession';
+import { BLOCKS, useSession } from '../session/useSession';
 import { Button } from '../components/ui';
 
 export default function Home() {
   const navigate = useNavigate();
   const start = useSession((s) => s.start);
+  const resume = useSession((s) => s.resume);
   const [streak, setStreak] = useState(0);
   const [doneToday, setDoneToday] = useState(false);
+  const [unfinished, setUnfinished] = useState<ActiveSession | null>(null);
 
   useEffect(() => {
     const today = dateKey(new Date());
@@ -17,7 +19,25 @@ export default function Home() {
       setStreak(currentStreak(all.map((s) => s.date), today));
     });
     void getSession(today).then((s) => setDoneToday(Boolean(s)));
+    void getActiveSession().then((s) => {
+      // Only today's session is worth resuming; yesterday's is stale.
+      if (s && s.date === today) setUnfinished(s);
+      else if (s) void clearActiveSession();
+    });
   }, []);
+
+  const beginFresh = () => {
+    start();
+    navigate('/session');
+  };
+
+  const continueSession = () => {
+    if (!unfinished) return;
+    resume(unfinished);
+    navigate('/session');
+  };
+
+  const nextBlock = unfinished ? BLOCKS[unfinished.blockIndex] : undefined;
 
   return (
     <div className="flex min-h-[70dvh] flex-col">
@@ -29,23 +49,34 @@ export default function Home() {
           {streak > 0 ? `${streak}-day streak` : 'A little every day'}
         </p>
       </header>
+
       <div className="flex flex-1 items-end pb-10">
         <div className="w-full space-y-3">
-          {doneToday && (
-            <p className="text-center text-sm text-zinc-500">
-              Today's session is done — another round is always fine.
-            </p>
+          {unfinished && nextBlock ? (
+            <>
+              <p className="text-center text-sm text-zinc-500">
+                You stopped part-way through — {unfinished.blockIndex} of {BLOCKS.length} blocks
+                done.
+              </p>
+              <Button variant="primary" className="w-full py-5 text-lg" onClick={continueSession}>
+                Continue — {nextBlock.label}
+              </Button>
+              <Button className="w-full" onClick={beginFresh}>
+                Start over instead
+              </Button>
+            </>
+          ) : (
+            <>
+              {doneToday && (
+                <p className="text-center text-sm text-zinc-500">
+                  Today's session is done — another round is always fine.
+                </p>
+              )}
+              <Button variant="primary" className="w-full py-5 text-lg" onClick={beginFresh}>
+                Start today's session
+              </Button>
+            </>
           )}
-          <Button
-            variant="primary"
-            className="w-full py-5 text-lg"
-            onClick={() => {
-              start();
-              navigate('/session');
-            }}
-          >
-            Start today's session
-          </Button>
         </div>
       </div>
     </div>

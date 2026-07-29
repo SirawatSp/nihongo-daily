@@ -31,6 +31,21 @@ export interface Favorite {
   addedAt: number;
 }
 
+/**
+ * A session that was started but not finished. Persisted so closing the app
+ * part-way through resumes where you left off instead of restarting.
+ */
+export interface ActiveSession {
+  date: string; // YYYY-MM-DD — only today's session is offered for resume
+  blockIndex: number;
+  completed: BlockId[];
+  skipped: BlockId[];
+  graded: { correct: number; total: number };
+  cardsReviewed: number;
+  /** Time actually spent in the session, excluding time the app was closed. */
+  elapsedMs: number;
+}
+
 export interface Settings {
   newCardsPerDay: number;
   voiceURI: string | null;
@@ -63,10 +78,11 @@ interface NihongoDB extends DBSchema {
   sessions: { key: string; value: SessionRecord };
   settings: { key: string; value: unknown };
   favorites: { key: string; value: Favorite };
+  activeSession: { key: string; value: ActiveSession };
 }
 
 export const DB_NAME = 'nihongo-daily';
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 
 let dbPromise: Promise<IDBPDatabase<NihongoDB>> | null = null;
 
@@ -87,6 +103,10 @@ function migrate(db: IDBPDatabase<NihongoDB>, oldVersion: number): void {
     // Kanji handwriting practice. Purely additive — every existing store is
     // left untouched, so vocab/kana/streak progress carries over intact.
     db.createObjectStore('kanjiStats', { keyPath: 'char' });
+  }
+  if (oldVersion < 3) {
+    // Resumable sessions. Additive; holds at most one in-flight session.
+    db.createObjectStore('activeSession');
   }
 }
 
@@ -160,6 +180,21 @@ export async function putSession(record: SessionRecord): Promise<void> {
 }
 export async function getAllSessions(): Promise<SessionRecord[]> {
   return (await getDb()).getAll('sessions');
+}
+
+// --- active (unfinished) session ---
+const ACTIVE_KEY = 'current';
+
+export async function getActiveSession(): Promise<ActiveSession | undefined> {
+  return (await getDb()).get('activeSession', ACTIVE_KEY);
+}
+
+export async function putActiveSession(session: ActiveSession): Promise<void> {
+  await (await getDb()).put('activeSession', session, ACTIVE_KEY);
+}
+
+export async function clearActiveSession(): Promise<void> {
+  await (await getDb()).delete('activeSession', ACTIVE_KEY);
 }
 
 // --- settings ---

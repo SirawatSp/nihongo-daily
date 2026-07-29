@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BLOCKS, useSession } from './useSession';
+import { BLOCKS, endSession, sessionMinutes, useSession } from './useSession';
 import KanaDrill from './blocks/KanaDrill';
 import VocabSrs from './blocks/VocabSrs';
 import KanjiWriting from './blocks/KanjiWriting';
@@ -37,10 +37,11 @@ function ProgressRail() {
 }
 
 function Summary() {
-  const { startedAt, completed, graded, cardsReviewed } = useSession();
+  const state = useSession();
+  const { completed, graded, cardsReviewed } = state;
   const [streak, setStreak] = useState<number | null>(null);
   const saved = useRef(false);
-  const minutes = startedAt ? Math.max(1, Math.round((Date.now() - startedAt) / 60000)) : 0;
+  const minutes = useRef(sessionMinutes(state)).current;
   const accuracy = graded.total > 0 ? graded.correct / graded.total : 0;
 
   useEffect(() => {
@@ -54,6 +55,8 @@ function Summary() {
       cardsReviewed,
       accuracy,
     })
+      // The session is finished, so the resume record is no longer wanted.
+      .then(endSession)
       .then(getAllSessions)
       .then((all) => setStreak(currentStreak(all.map((s) => s.date), today)));
   }, [completed, minutes, cardsReviewed, accuracy]);
@@ -89,9 +92,9 @@ function Summary() {
 }
 
 export default function SessionShell() {
-  const { blockIndex, startedAt, finishBlock, skipBlock } = useSession();
+  const { blockIndex, active, finishBlock, skipBlock } = useSession();
 
-  if (startedAt === null) return null;
+  if (!active) return null;
   if (blockIndex >= BLOCKS.length) return <Summary />;
 
   const block = BLOCKS[blockIndex];

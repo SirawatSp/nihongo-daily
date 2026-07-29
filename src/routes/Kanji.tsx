@@ -30,7 +30,9 @@ export default function Kanji() {
   const [stats, setStats] = useState<Map<string, KanjiStat>>(new Map());
   const [level, setLevel] = useState<Level>('all');
   const [query, setQuery] = useState('');
-  const [active, setActive] = useState<KanjiEntry | null>(null);
+  // Index into the filtered list, so you can move between characters without
+  // returning to the grid. null = browsing.
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [result, setResult] = useState<StrokeScore[] | null>(null);
   // Bumped only by "Practise again", so finishing a character leaves the
   // completed strokes on screen instead of remounting the canvas.
@@ -65,6 +67,10 @@ export default function Kanji() {
 
   const written = [...stats.values()].filter((s) => s.completed > 0).length;
 
+  // Clamp in case the filter changed while a character was open.
+  const active =
+    activeIndex !== null && activeIndex < filtered.length ? filtered[activeIndex]! : null;
+
   const complete = (scores: StrokeScore[]) => {
     if (!active) return;
     setResult(scores);
@@ -73,21 +79,36 @@ export default function Kanji() {
     );
   };
 
+  /** Move to another character without leaving the practice view. */
+  const go = (delta: number) => {
+    if (activeIndex === null) return;
+    const next = activeIndex + delta;
+    if (next < 0 || next >= filtered.length) return;
+    setActiveIndex(next);
+    setResult(null);
+    setAttempt(0);
+  };
+
   // Practice view for a single character.
   if (active) {
     const word = exampleWordFor(active.char, vocab);
     return (
       <div>
-        <button
-          onClick={() => {
-            setActive(null);
-            setResult(null);
-            setAttempt(0);
-          }}
-          className="mb-3 min-h-11 text-sm text-zinc-500"
-        >
-          ← All kanji
-        </button>
+        <div className="mb-3 flex items-center justify-between">
+          <button
+            onClick={() => {
+              setActiveIndex(null);
+              setResult(null);
+              setAttempt(0);
+            }}
+            className="min-h-11 text-sm text-zinc-500"
+          >
+            ← All kanji
+          </button>
+          <span className="text-xs text-zinc-400">
+            {(activeIndex ?? 0) + 1} of {filtered.length}
+          </span>
+        </div>
 
         <div className="mb-3 text-center">
           <p className="text-lg">{active.meanings.slice(0, 3).join(', ')}</p>
@@ -152,6 +173,26 @@ export default function Kanji() {
             )}
           </Card>
         )}
+
+        {/* Move between characters without going back to the grid. */}
+        <div className="mt-4 flex gap-2">
+          <Button
+            onClick={() => go(-1)}
+            disabled={(activeIndex ?? 0) === 0}
+            aria-label="Previous kanji"
+            className="px-5 py-4"
+          >
+            ←
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => go(1)}
+            disabled={(activeIndex ?? 0) >= filtered.length - 1}
+            className="flex-1 py-4"
+          >
+            Next kanji →
+          </Button>
+        </div>
       </div>
     );
   }
@@ -195,11 +236,11 @@ export default function Kanji() {
       )}
 
       <div className="grid grid-cols-6 gap-2">
-        {filtered.map((k) => (
+        {filtered.map((k, i) => (
           <button
             key={k.char}
             onClick={() => {
-              setActive(k);
+              setActiveIndex(i);
               setResult(null);
               setAttempt(0);
             }}
