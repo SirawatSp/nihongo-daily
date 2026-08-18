@@ -23,6 +23,20 @@ One button starts an ~18-minute session of six blocks:
 6. **Reading** — a short graded passage with furigana toggle, tap-for-gloss,
    and one comprehension question.
 
+## Quick practice (travel mode)
+
+The daily session builds skill over time; **Quick practice** is for the
+moment you are actually standing at a counter. Pick the situation you are
+in — Eating, Getting around, Directions, Hotel, Shopping, Trouble, Basics,
+or Mixed — and get eight phrases you would really say, in about three
+minutes.
+
+Each item shows the English, you say the Japanese from memory, then check
+yourself and tap **Got it** or **Not yet**. Phrases you find hard come back
+sooner; ones you are confident with drop down the queue. Phrases are the
+traveller's own lines pulled from the dialogues, so everything drilled is
+immediately usable.
+
 There is also a **Kanji** tab for focused writing practice outside the daily
 session: browse all 325 characters, filter by JLPT level, search by meaning
 or reading, and tap any character to write it. Tiles are coloured by how

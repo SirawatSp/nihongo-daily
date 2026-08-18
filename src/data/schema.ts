@@ -41,6 +41,8 @@ export const grammarSchema = z.object({
 export const dialogueSchema = z.object({
   id: z.string().min(1),
   scene: z.string().min(1),
+  /** Which travel situation this belongs to; drives Quick Practice. */
+  theme: z.enum(THEMES),
   lines: z
     .array(
       z.object({

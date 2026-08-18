@@ -6,6 +6,7 @@ import Phrasebook from './routes/Phrasebook';
 import Progress from './routes/Progress';
 import Grammar from './routes/Grammar';
 import Kanji from './routes/Kanji';
+import Quick from './routes/Quick';
 import Settings from './routes/Settings';
 import UpdateToast from './components/UpdateToast';
 import { getSettings } from './lib/db';
@@ -25,6 +26,7 @@ export function applyTheme(theme: 'system' | 'light' | 'dark') {
 
 const tabs = [
   { to: '/', label: 'Today', icon: '☀️' },
+  { to: '/quick', label: 'Quick', icon: '⚡' },
   { to: '/kanji', label: 'Kanji', icon: '✍️' },
   { to: '/phrasebook', label: 'Phrases', icon: '💬' },
   { to: '/grammar', label: 'Grammar', icon: '📖' },
@@ -55,6 +57,7 @@ export default function App() {
           <Route path="/progress" element={<Progress />} />
           <Route path="/grammar" element={<Grammar />} />
           <Route path="/kanji" element={<Kanji />} />
+          <Route path="/quick" element={<Quick />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Home />} />
         </Routes>

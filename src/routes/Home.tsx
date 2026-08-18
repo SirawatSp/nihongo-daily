@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { clearActiveSession, getActiveSession, getAllSessions, getSession, type ActiveSession } from '../lib/db';
 import { currentStreak, dateKey } from '../lib/streak';
 import { BLOCKS, useSession } from '../session/useSession';
@@ -78,6 +78,15 @@ export default function Home() {
             </>
           )}
         </div>
+      </div>
+
+      <div className="pb-6">
+        <Link to="/quick" className="block">
+          <Button className="w-full py-4">⚡ Quick practice — 3 min</Button>
+        </Link>
+        <p className="mt-2 text-center text-xs text-zinc-400">
+          Travel phrases for the situation you're in
+        </p>
       </div>
     </div>
   );
