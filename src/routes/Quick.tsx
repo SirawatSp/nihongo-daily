@@ -134,7 +134,7 @@ export default function Quick() {
   // --- drill ---
   const phrase = deck[index]!;
   return (
-    <div>
+    <div className="flex min-h-[80dvh] flex-col">
       <div className="mb-3 flex items-center justify-between">
         <button onClick={() => setDeck(null)} className="min-h-11 text-sm text-zinc-500">
           ← Situations
@@ -148,7 +148,7 @@ export default function Quick() {
         {phrase.scene}
       </p>
 
-      <Card className="mb-4 text-center">
+      <Card className="text-center">
         <p className="text-xl">{phrase.en}</p>
         <p className="mt-3 text-sm text-zinc-500">
           {revealed ? 'How did you do?' : 'Say it in Japanese, then check.'}
@@ -180,27 +180,30 @@ export default function Quick() {
         )}
       </Card>
 
-      {!revealed ? (
-        <Button
-          variant="primary"
-          className="w-full py-5 text-lg"
-          onClick={() => {
-            setRevealed(true);
-            if (ttsAvailable()) speak(phrase.ja);
-          }}
-        >
-          Show me
-        </Button>
-      ) : (
-        <div className="grid grid-cols-2 gap-2">
-          <Button className="py-5 text-amber-600 dark:text-amber-400" onClick={() => rate_(false)}>
-            Not yet
+      {/* Actions live at the bottom, within thumb reach. */}
+      <div className="mt-auto pt-6">
+        {!revealed ? (
+          <Button
+            variant="primary"
+            className="w-full py-5 text-lg"
+            onClick={() => {
+              setRevealed(true);
+              if (ttsAvailable()) speak(phrase.ja);
+            }}
+          >
+            Show me
           </Button>
-          <Button className="py-5 text-green-600 dark:text-green-400" onClick={() => rate_(true)}>
-            Got it
-          </Button>
-        </div>
-      )}
+        ) : (
+          <div className="grid grid-cols-2 gap-2">
+            <Button className="py-5 text-amber-600 dark:text-amber-400" onClick={() => rate_(false)}>
+              Not yet
+            </Button>
+            <Button className="py-5 text-green-600 dark:text-green-400" onClick={() => rate_(true)}>
+              Got it
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
