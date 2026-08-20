@@ -1064,5 +1064,805 @@
    "終電はもう出ましたか",
    "タクシー乗り場はどこですか"
   ]
+ },
+ {
+  "id": "d29",
+  "scene": "Being seated at a restaurant",
+  "theme": "food",
+  "lines": [
+   {
+    "speaker": "Staff",
+    "ja": "いらっしゃいませ。何名様ですか。",
+    "kana": "いらっしゃいませ。なんめいさまですか。",
+    "en": "Welcome. How many people?"
+   },
+   {
+    "speaker": "You",
+    "ja": "二人です。",
+    "kana": "ふたりです。",
+    "en": "Two people."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "禁煙席でよろしいですか。",
+    "kana": "きんえんせきでよろしいですか。",
+    "en": "Is a non-smoking seat all right?"
+   },
+   {
+    "speaker": "You",
+    "ja": "はい、お願いします。",
+    "kana": "はい、おねがいします。",
+    "en": "Yes, please."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "こちらへどうぞ。",
+    "kana": "こちらへどうぞ。",
+    "en": "This way, please."
+   }
+  ],
+  "keyPhrases": [
+   "二人です",
+   "はい、お願いします"
+  ]
+ },
+ {
+  "id": "d30",
+  "scene": "Paying the bill",
+  "theme": "food",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、お会計をお願いします。",
+    "kana": "すみません、おかいけいをおねがいします。",
+    "en": "Excuse me, the bill please."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "あちらのレジでお願いします。",
+    "kana": "あちらのレジでおねがいします。",
+    "en": "Please pay at that register."
+   },
+   {
+    "speaker": "You",
+    "ja": "別々に払えますか。",
+    "kana": "べつべつにはらえますか。",
+    "en": "Can we pay separately?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "はい、大丈夫です。",
+    "kana": "はい、だいじょうぶです。",
+    "en": "Yes, that's fine."
+   }
+  ],
+  "keyPhrases": [
+   "お会計をお願いします",
+   "別々に払えますか"
+  ]
+ },
+ {
+  "id": "d31",
+  "scene": "Saying you cannot eat meat or fish",
+  "theme": "food",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、肉と魚が食べられません。",
+    "kana": "すみません、にくとさかながたべられません。",
+    "en": "Excuse me, I can't eat meat or fish."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "では、野菜の料理はいかがですか。",
+    "kana": "では、やさいのりょうりはいかがですか。",
+    "en": "Then how about a vegetable dish?"
+   },
+   {
+    "speaker": "You",
+    "ja": "それをお願いします。だしも入っていませんか。",
+    "kana": "それをおねがいします。だしもはいっていませんか。",
+    "en": "I'll have that. Does it contain dashi as well?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "確認してまいります。",
+    "kana": "かくにんしてまいります。",
+    "en": "I'll go and check."
+   }
+  ],
+  "keyPhrases": [
+   "肉と魚が食べられません",
+   "だしも入っていませんか"
+  ]
+ },
+ {
+  "id": "d32",
+  "scene": "Ordering at a counter",
+  "theme": "food",
+  "lines": [
+   {
+    "speaker": "Staff",
+    "ja": "店内でお召し上がりですか、お持ち帰りですか。",
+    "kana": "てんないでおめしあがりですか、おもちかえりですか。",
+    "en": "Eating in or taking away?"
+   },
+   {
+    "speaker": "You",
+    "ja": "持ち帰りでお願いします。",
+    "kana": "もちかえりでおねがいします。",
+    "en": "To take away, please."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "ご一緒にお飲み物はいかがですか。",
+    "kana": "ごいっしょにおのみものはいかがですか。",
+    "en": "Would you like a drink with that?"
+   },
+   {
+    "speaker": "You",
+    "ja": "いいえ、結構です。",
+    "kana": "いいえ、けっこうです。",
+    "en": "No, thank you."
+   }
+  ],
+  "keyPhrases": [
+   "持ち帰りでお願いします",
+   "いいえ、結構です"
+  ]
+ },
+ {
+  "id": "d33",
+  "scene": "Asking for more water",
+  "theme": "food",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、お水をもう一杯ください。",
+    "kana": "すみません、おみずをもういっぱいください。",
+    "en": "Excuse me, one more glass of water, please."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "かしこまりました。",
+    "kana": "かしこまりました。",
+    "en": "Certainly."
+   },
+   {
+    "speaker": "You",
+    "ja": "あと、取り皿をお願いします。",
+    "kana": "あと、とりざらをおねがいします。",
+    "en": "Also, a small plate, please."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "はい、少々お待ちください。",
+    "kana": "はい、しょうしょうおまちください。",
+    "en": "Yes, one moment please."
+   }
+  ],
+  "keyPhrases": [
+   "お水をもう一杯ください",
+   "取り皿をお願いします"
+  ]
+ },
+ {
+  "id": "d34",
+  "scene": "At the convenience store counter",
+  "theme": "shopping",
+  "lines": [
+   {
+    "speaker": "Staff",
+    "ja": "お箸はご入用ですか。",
+    "kana": "おはしはごいりようですか。",
+    "en": "Do you need chopsticks?"
+   },
+   {
+    "speaker": "You",
+    "ja": "はい、お願いします。",
+    "kana": "はい、おねがいします。",
+    "en": "Yes, please."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "袋は有料ですが、いかがですか。",
+    "kana": "ふくろはゆうりょうですが、いかがですか。",
+    "en": "Bags cost extra — would you like one?"
+   },
+   {
+    "speaker": "You",
+    "ja": "いりません。そのままで大丈夫です。",
+    "kana": "いりません。そのままでだいじょうぶです。",
+    "en": "No thanks. As it is, is fine."
+   }
+  ],
+  "keyPhrases": [
+   "はい、お願いします",
+   "そのままで大丈夫です"
+  ]
+ },
+ {
+  "id": "d35",
+  "scene": "Asking which train to take",
+  "theme": "transport",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、渋谷に行きたいんですが。",
+    "kana": "すみません、しぶやにいきたいんですが。",
+    "en": "Excuse me, I'd like to go to Shibuya."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "三番線の各駅停車に乗ってください。",
+    "kana": "さんばんせんのかくえきていしゃにのってください。",
+    "en": "Take the local train on track three."
+   },
+   {
+    "speaker": "You",
+    "ja": "乗り換えはありますか。",
+    "kana": "のりかえはありますか。",
+    "en": "Is there a transfer?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "いいえ、直通です。",
+    "kana": "いいえ、ちょくつうです。",
+    "en": "No, it's direct."
+   }
+  ],
+  "keyPhrases": [
+   "〜に行きたいんですが",
+   "乗り換えはありますか"
+  ]
+ },
+ {
+  "id": "d36",
+  "scene": "Topping up an IC card",
+  "theme": "transport",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、ICカードにチャージしたいです。",
+    "kana": "すみません、アイシーカードにチャージしたいです。",
+    "en": "Excuse me, I'd like to top up my IC card."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "あの機械でできますよ。",
+    "kana": "あのきかいでできますよ。",
+    "en": "You can do it at that machine."
+   },
+   {
+    "speaker": "You",
+    "ja": "使い方を教えていただけますか。",
+    "kana": "つかいかたをおしえていただけますか。",
+    "en": "Could you show me how to use it?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "はい、ご案内します。",
+    "kana": "はい、ごあんないします。",
+    "en": "Yes, I'll show you."
+   }
+  ],
+  "keyPhrases": [
+   "チャージしたいです",
+   "使い方を教えていただけますか"
+  ]
+ },
+ {
+  "id": "d37",
+  "scene": "Asking if a seat is free",
+  "theme": "transport",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、この席は空いていますか。",
+    "kana": "すみません、このせきはあいていますか。",
+    "en": "Excuse me, is this seat free?"
+   },
+   {
+    "speaker": "Passenger",
+    "ja": "はい、どうぞ。",
+    "kana": "はい、どうぞ。",
+    "en": "Yes, go ahead."
+   },
+   {
+    "speaker": "You",
+    "ja": "ありがとうございます。",
+    "kana": "ありがとうございます。",
+    "en": "Thank you."
+   }
+  ],
+  "keyPhrases": [
+   "この席は空いていますか"
+  ]
+ },
+ {
+  "id": "d38",
+  "scene": "Checking in at the airport",
+  "theme": "transport",
+  "lines": [
+   {
+    "speaker": "Staff",
+    "ja": "お預けの荷物はありますか。",
+    "kana": "おあずけのにもつはありますか。",
+    "en": "Do you have baggage to check?"
+   },
+   {
+    "speaker": "You",
+    "ja": "はい、一つあります。",
+    "kana": "はい、ひとつあります。",
+    "en": "Yes, one piece."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "こちらにのせてください。",
+    "kana": "こちらにのせてください。",
+    "en": "Please put it here."
+   },
+   {
+    "speaker": "You",
+    "ja": "窓側の席をお願いできますか。",
+    "kana": "まどがわのせきをおねがいできますか。",
+    "en": "Could I have a window seat?"
+   }
+  ],
+  "keyPhrases": [
+   "一つあります",
+   "窓側の席をお願いできますか"
+  ]
+ },
+ {
+  "id": "d39",
+  "scene": "Express or local train",
+  "theme": "transport",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、これは特急ですか。",
+    "kana": "すみません、これはとっきゅうですか。",
+    "en": "Excuse me, is this the express?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "いいえ、普通です。特急は次の電車です。",
+    "kana": "いいえ、ふつうです。とっきゅうはつぎのでんしゃです。",
+    "en": "No, this is the local. The express is the next train."
+   },
+   {
+    "speaker": "You",
+    "ja": "何分ぐらい待ちますか。",
+    "kana": "なんぷんぐらいまちますか。",
+    "en": "About how many minutes is the wait?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "十分ほどです。",
+    "kana": "じゅっぷんほどです。",
+    "en": "About ten minutes."
+   }
+  ],
+  "keyPhrases": [
+   "これは特急ですか",
+   "何分ぐらい待ちますか"
+  ]
+ },
+ {
+  "id": "d40",
+  "scene": "Asking about tax-free shopping",
+  "theme": "shopping",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、免税はできますか。",
+    "kana": "すみません、めんぜいはできますか。",
+    "en": "Excuse me, can I buy this tax-free?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "はい、パスポートをお持ちですか。",
+    "kana": "はい、パスポートをおもちですか。",
+    "en": "Yes, do you have your passport?"
+   },
+   {
+    "speaker": "You",
+    "ja": "はい、あります。",
+    "kana": "はい、あります。",
+    "en": "Yes, I have it."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "では、こちらのカウンターへどうぞ。",
+    "kana": "では、こちらのカウンターへどうぞ。",
+    "en": "Then please come to this counter."
+   }
+  ],
+  "keyPhrases": [
+   "免税はできますか",
+   "はい、あります"
+  ]
+ },
+ {
+  "id": "d41",
+  "scene": "Cash only",
+  "theme": "shopping",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "カードは使えますか。",
+    "kana": "カードはつかえますか。",
+    "en": "Can I use a card?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "すみません、現金のみです。",
+    "kana": "すみません、げんきんのみです。",
+    "en": "Sorry, cash only."
+   },
+   {
+    "speaker": "You",
+    "ja": "近くにATMはありますか。",
+    "kana": "ちかくにエーティーエムはありますか。",
+    "en": "Is there an ATM nearby?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "コンビニにありますよ。",
+    "kana": "コンビニにありますよ。",
+    "en": "There's one at the convenience store."
+   }
+  ],
+  "keyPhrases": [
+   "カードは使えますか",
+   "近くにATMはありますか"
+  ]
+ },
+ {
+  "id": "d42",
+  "scene": "Buying medicine at a pharmacy",
+  "theme": "emergency",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、頭痛の薬はありますか。",
+    "kana": "すみません、ずつうのくすりはありますか。",
+    "en": "Excuse me, do you have headache medicine?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "こちらです。一日三回、食後に飲んでください。",
+    "kana": "こちらです。いちにちさんかい、しょくごにのんでください。",
+    "en": "This one. Take it three times a day, after meals."
+   },
+   {
+    "speaker": "You",
+    "ja": "眠くなりますか。",
+    "kana": "ねむくなりますか。",
+    "en": "Will it make me sleepy?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "少し眠くなるかもしれません。",
+    "kana": "すこしねむくなるかもしれません。",
+    "en": "It might make you a little sleepy."
+   }
+  ],
+  "keyPhrases": [
+   "頭痛の薬はありますか",
+   "眠くなりますか"
+  ]
+ },
+ {
+  "id": "d43",
+  "scene": "Asking how to get somewhere",
+  "theme": "directions",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、浅草寺はどうやって行きますか。",
+    "kana": "すみません、せんそうじはどうやっていきますか。",
+    "en": "Excuse me, how do I get to Sensoji?"
+   },
+   {
+    "speaker": "Passerby",
+    "ja": "この道をまっすぐ行って、二つ目の信号を左です。",
+    "kana": "このみちをまっすぐいって、ふたつめのしんごうをひだりです。",
+    "en": "Go straight down this road and turn left at the second light."
+   },
+   {
+    "speaker": "You",
+    "ja": "歩いて何分ぐらいですか。",
+    "kana": "あるいてなんぷんぐらいですか。",
+    "en": "About how many minutes on foot?"
+   },
+   {
+    "speaker": "Passerby",
+    "ja": "十分ぐらいです。",
+    "kana": "じゅっぷんぐらいです。",
+    "en": "About ten minutes."
+   }
+  ],
+  "keyPhrases": [
+   "どうやって行きますか",
+   "歩いて何分ぐらいですか"
+  ]
+ },
+ {
+  "id": "d44",
+  "scene": "Finding the right exit",
+  "theme": "directions",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、東口はどちらですか。",
+    "kana": "すみません、ひがしぐちはどちらですか。",
+    "en": "Excuse me, which way is the east exit?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "あの階段を上がって、右です。",
+    "kana": "あのかいだんをあがって、みぎです。",
+    "en": "Go up those stairs and turn right."
+   },
+   {
+    "speaker": "You",
+    "ja": "ありがとうございます。助かりました。",
+    "kana": "ありがとうございます。たすかりました。",
+    "en": "Thank you. That's a big help."
+   }
+  ],
+  "keyPhrases": [
+   "東口はどちらですか",
+   "助かりました"
+  ]
+ },
+ {
+  "id": "d45",
+  "scene": "Checking you are going the right way",
+  "theme": "directions",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、この道で合っていますか。",
+    "kana": "すみません、このみちであっていますか。",
+    "en": "Excuse me, is this the right way?"
+   },
+   {
+    "speaker": "Passerby",
+    "ja": "いいえ、反対です。戻ってください。",
+    "kana": "いいえ、はんたいです。もどってください。",
+    "en": "No, it's the other way. Please go back."
+   },
+   {
+    "speaker": "You",
+    "ja": "そうですか。ありがとうございます。",
+    "kana": "そうですか。ありがとうございます。",
+    "en": "I see. Thank you."
+   }
+  ],
+  "keyPhrases": [
+   "この道で合っていますか"
+  ]
+ },
+ {
+  "id": "d46",
+  "scene": "Asking for a late checkout",
+  "theme": "lodging",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、チェックアウトを一時間遅くできますか。",
+    "kana": "すみません、チェックアウトをいちじかんおそくできますか。",
+    "en": "Excuse me, could I check out an hour later?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "十一時までなら大丈夫です。",
+    "kana": "じゅういちじまでならだいじょうぶです。",
+    "en": "Until eleven is fine."
+   },
+   {
+    "speaker": "You",
+    "ja": "助かります。ありがとうございます。",
+    "kana": "たすかります。ありがとうございます。",
+    "en": "That helps. Thank you."
+   }
+  ],
+  "keyPhrases": [
+   "チェックアウトを遅くできますか",
+   "助かります"
+  ]
+ },
+ {
+  "id": "d47",
+  "scene": "A problem in the room",
+  "theme": "lodging",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、部屋のエアコンが動きません。",
+    "kana": "すみません、へやのエアコンがうごきません。",
+    "en": "Excuse me, the air conditioner in my room doesn't work."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "申し訳ありません。すぐに見に行きます。",
+    "kana": "もうしわけありません。すぐにみにいきます。",
+    "en": "We're very sorry. We'll come and look right away."
+   },
+   {
+    "speaker": "You",
+    "ja": "お願いします。三階の部屋です。",
+    "kana": "おねがいします。さんがいのへやです。",
+    "en": "Please do. It's the room on the third floor."
+   }
+  ],
+  "keyPhrases": [
+   "エアコンが動きません",
+   "お願いします"
+  ]
+ },
+ {
+  "id": "d48",
+  "scene": "Asking someone to repeat or write it down",
+  "theme": "smalltalk",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、もう一度お願いします。",
+    "kana": "すみません、もういちどおねがいします。",
+    "en": "Excuse me, once more please."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "千二百円です。",
+    "kana": "せんにひゃくえんです。",
+    "en": "One thousand two hundred yen."
+   },
+   {
+    "speaker": "You",
+    "ja": "すみません、ここに書いていただけますか。",
+    "kana": "すみません、ここにかいていただけますか。",
+    "en": "Sorry, could you write it here?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "はい、どうぞ。",
+    "kana": "はい、どうぞ。",
+    "en": "Yes, here you are."
+   }
+  ],
+  "keyPhrases": [
+   "もう一度お願いします",
+   "ここに書いていただけますか"
+  ]
+ },
+ {
+  "id": "d49",
+  "scene": "Getting past people on a crowded train",
+  "theme": "smalltalk",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、通ります。",
+    "kana": "すみません、とおります。",
+    "en": "Excuse me, coming through."
+   },
+   {
+    "speaker": "Passenger",
+    "ja": "どうぞ。",
+    "kana": "どうぞ。",
+    "en": "Go ahead."
+   },
+   {
+    "speaker": "You",
+    "ja": "降ります。すみません。",
+    "kana": "おります。すみません。",
+    "en": "I'm getting off. Excuse me."
+   }
+  ],
+  "keyPhrases": [
+   "すみません、通ります",
+   "降ります"
+  ]
+ },
+ {
+  "id": "d50",
+  "scene": "Feeling unwell",
+  "theme": "emergency",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、気分が悪いです。",
+    "kana": "すみません、きぶんがわるいです。",
+    "en": "Excuse me, I feel unwell."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "大丈夫ですか。座ってください。",
+    "kana": "だいじょうぶですか。すわってください。",
+    "en": "Are you all right? Please sit down."
+   },
+   {
+    "speaker": "You",
+    "ja": "病院に行きたいです。",
+    "kana": "びょういんにいきたいです。",
+    "en": "I'd like to go to a hospital."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "すぐに手配します。",
+    "kana": "すぐにてはいします。",
+    "en": "I'll arrange it right away."
+   }
+  ],
+  "keyPhrases": [
+   "気分が悪いです",
+   "病院に行きたいです"
+  ]
+ },
+ {
+  "id": "d51",
+  "scene": "Asking for someone who speaks English",
+  "theme": "emergency",
+  "lines": [
+   {
+    "speaker": "You",
+    "ja": "すみません、英語が話せる人はいますか。",
+    "kana": "すみません、えいごがはなせるひとはいますか。",
+    "en": "Excuse me, is there someone who speaks English?"
+   },
+   {
+    "speaker": "Staff",
+    "ja": "少々お待ちください。呼んできます。",
+    "kana": "しょうしょうおまちください。よんできます。",
+    "en": "One moment please. I'll go and call someone."
+   },
+   {
+    "speaker": "You",
+    "ja": "ありがとうございます。",
+    "kana": "ありがとうございます。",
+    "en": "Thank you very much."
+   }
+  ],
+  "keyPhrases": [
+   "英語が話せる人はいますか"
+  ]
+ },
+ {
+  "id": "d52",
+  "scene": "Browsing in a shop",
+  "theme": "shopping",
+  "lines": [
+   {
+    "speaker": "Staff",
+    "ja": "いらっしゃいませ。",
+    "kana": "いらっしゃいませ。",
+    "en": "Welcome."
+   },
+   {
+    "speaker": "You",
+    "ja": "こんにちは。見ているだけです。",
+    "kana": "こんにちは。みているだけです。",
+    "en": "Hello. I'm just looking."
+   },
+   {
+    "speaker": "Staff",
+    "ja": "ごゆっくりどうぞ。",
+    "kana": "ごゆっくりどうぞ。",
+    "en": "Please take your time."
+   },
+   {
+    "speaker": "You",
+    "ja": "ありがとうございます。",
+    "kana": "ありがとうございます。",
+    "en": "Thank you."
+   }
+  ],
+  "keyPhrases": [
+   "見ているだけです"
+  ]
  }
 ]

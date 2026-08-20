@@ -29,7 +29,12 @@ The daily session builds skill over time; **Quick practice** is for the
 moment you are actually standing at a counter. Pick the situation you are
 in — Eating, Getting around, Directions, Hotel, Shopping, Trouble, Basics,
 or Mixed — and get eight phrases you would really say, in about three
-minutes.
+minutes. The picker shows how many phrases in each situation you already
+recall confidently (e.g. 5/23), so it is obvious where the gaps are.
+
+The pool is 113 practisable phrases across 52 dialogues, weighted toward
+the situations that come up most: Eating 23, Getting around 22,
+Shopping 21, Trouble 14, Directions 11, Hotel 11, Basics 11.
 
 Each item shows the English, you say the Japanese from memory, then check
 yourself and tap **Got it** or **Not yet**. Phrases you find hard come back

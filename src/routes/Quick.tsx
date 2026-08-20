@@ -4,6 +4,7 @@ import dialoguesRaw from '../data/dialogues.json';
 import type { DialogueEntry } from '../data/schema';
 import {
   buildQuickDeck,
+  confidentCount,
   ratePhrase,
   SCENARIOS,
   travelPhrases,
@@ -42,11 +43,17 @@ export default function Quick() {
     });
   }, []);
 
+  /** Per-situation totals and how many you already recall confidently. */
   const counts = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const p of ALL_PHRASES) map.set(p.theme, (map.get(p.theme) ?? 0) + 1);
+    const map = new Map<string, { total: number; solid: number }>();
+    for (const p of ALL_PHRASES) {
+      const row = map.get(p.theme) ?? { total: 0, solid: 0 };
+      row.total += 1;
+      if ((stats.get(p.id)?.strength ?? 0) >= 0.7) row.solid += 1;
+      map.set(p.theme, row);
+    }
     return map;
-  }, []);
+  }, [stats]);
 
   const begin = (id: ScenarioId | null) => {
     setScenario(id);
@@ -82,8 +89,11 @@ export default function Quick() {
     return (
       <div>
         <h1 className="mb-1 text-xl font-semibold">Quick practice</h1>
-        <p className="mb-5 text-sm text-zinc-500">
+        <p className="mb-1 text-sm text-zinc-500">
           Three minutes on the phrases you need right now. Pick where you are.
+        </p>
+        <p className="mb-5 text-xs text-zinc-400">
+          {confidentCount(stats)} of {ALL_PHRASES.length} phrases solid
         </p>
         <div className="space-y-2">
           {SCENARIOS.map((s) => (
@@ -96,7 +106,9 @@ export default function Quick() {
                 <span className="block font-medium">{s.label}</span>
                 <span className="block text-sm text-zinc-500">{s.hint}</span>
               </span>
-              <span className="shrink-0 text-xs text-zinc-400">{counts.get(s.id) ?? 0}</span>
+              <span className="shrink-0 text-xs text-zinc-400">
+                {counts.get(s.id)?.solid ?? 0}/{counts.get(s.id)?.total ?? 0}
+              </span>
             </button>
           ))}
           <Button variant="primary" className="w-full py-4" onClick={() => begin(null)}>
