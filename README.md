@@ -1,8 +1,31 @@
 # Nihongo Daily
 
-A local-first, single-user PWA for daily Japanese practice — built for one
-person who opens it every day on a phone, aiming at travel-usable Japanese
-around JLPT N4–N3.
+A local-first, single-user PWA for an absolute beginner leaving for Japan
+in two weeks. The primary path is practical, polite travel Japanese.
+
+## Two-week departure plan
+
+Home presents 14 short lessons (~5–8 minutes each): 12 essential situations
+and two rehearsals. Each lesson teaches three phrases with Japanese,
+kana, romanization, audio, and usage notes; asks the learner to recall each
+phrase aloud; then checks comprehension of a likely staff reply. Recall is
+self-rated, not automatic pronunciation scoring. A lesson is marked
+practised only after all seven exercises; this does not claim fluency.
+
+Every exercise saves an IndexedDB checkpoint, so reload or Save & exit
+restores the exact exercise. Database v5 adds a travel-progress store without
+dropping existing study data, and backup export/import includes that store.
+Older backups remain supported. The departure date defaults to 22 October
+2026 for this trip and can be changed in Settings.
+
+The trip phrasebook searches 36 essential phrases by English, Japanese,
+reading, or romanization; filter by situation or save favorites. Existing
+example conversations remain in the Conversations view. Quick practice
+rehearses the same beginner phrase pool. Main navigation has four tabs:
+Today, Practice, Phrases, More. Grammar, handwriting, detailed progress,
+settings, and the original full session live under More.
+
+## Optional full study session
 
 One button starts an ~18-minute session of six blocks:
 
@@ -25,21 +48,19 @@ One button starts an ~18-minute session of six blocks:
 
 ## Quick practice (travel mode)
 
-The daily session builds skill over time; **Quick practice** is for the
+The travel lessons build skill over time; **Quick practice** is for the
 moment you are actually standing at a counter. Pick the situation you are
 in — Eating, Getting around, Directions, Hotel, Shopping, Trouble, Basics,
-or Mixed — and get eight phrases you would really say, in about three
+or Mixed — and get up to eight phrases you would really say, in about three
 minutes. The picker shows how many phrases in each situation you already
 recall confidently (e.g. 5/23), so it is obvious where the gaps are.
 
-The pool is 113 practisable phrases across 52 dialogues, weighted toward
-the situations that come up most: Eating 23, Getting around 22,
-Shopping 21, Trouble 14, Directions 11, Hotel 11, Basics 11.
+The pool is the 36 original beginner phrases from the departure plan.
 
 Each item shows the English, you say the Japanese from memory, then check
 yourself and tap **Got it** or **Not yet**. Phrases you find hard come back
 sooner; ones you are confident with drop down the queue. Phrases are the
-traveller's own lines pulled from the dialogues, so everything drilled is
+traveller's own lines, so everything drilled is
 immediately usable.
 
 There is also a **Kanji** tab for focused writing practice outside the daily

@@ -23,7 +23,7 @@ export default defineConfig({
       manifest: {
         name: 'Nihongo Daily',
         short_name: 'Nihongo',
-        description: 'Daily Japanese practice — kana, vocab SRS, listening, speaking, reading.',
+        description: 'Beginner Japanese for your trip: polite phrases, daily recall, and replies you will hear.',
         display: 'standalone',
         orientation: 'portrait',
         theme_color: '#18181b',

@@ -24,6 +24,8 @@ export interface DialogueLike {
 }
 
 export interface Phrase {
+  romaji?: string;
+  tip?: string;
   /** Stable id: dialogue id + line index. */
   id: string;
   ja: string;

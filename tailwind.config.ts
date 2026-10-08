@@ -6,12 +6,13 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        display: ['Georgia', '"Yu Mincho"', 'serif'],
         sans: ['"Hiragino Sans"', '"Noto Sans JP"', '"Yu Gothic"', 'sans-serif'],
       },
       colors: {
         accent: {
-          DEFAULT: '#2563eb',
-          dark: '#3b82f6',
+          DEFAULT: '#a63e2c',
+          dark: '#c04b35',
         },
       },
       lineHeight: {

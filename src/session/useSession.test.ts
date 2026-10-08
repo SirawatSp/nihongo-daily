@@ -61,6 +61,14 @@ describe('useSession', () => {
     expect(after.blockIndex).toBe(1);
   });
 
+  it('does not count an empty vocabulary or writing block as practice', () => {
+    useSession.getState().start();
+    useSession.getState().finishBlock('vocab', { correct: 0, total: 0, cards: 0 });
+    useSession.getState().finishBlock('kanji', { correct: 0, total: 0 });
+    expect(useSession.getState().completed).toEqual([]);
+    expect(useSession.getState().skipped).toEqual(['vocab', 'kanji']);
+  });
+
   it('banks elapsed time when a block finishes', () => {
     vi.spyOn(Date, 'now').mockReturnValue(1_000_000);
     useSession.getState().start();

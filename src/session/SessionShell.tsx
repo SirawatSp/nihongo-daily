@@ -9,7 +9,7 @@ import Speaking from './blocks/Speaking';
 import Reading from './blocks/Reading';
 import { getAllSessions, putSession } from '../lib/db';
 import { currentStreak, dateKey } from '../lib/streak';
-import { Button, Card } from '../components/ui';
+import { Card } from '../components/ui';
 
 function ProgressRail() {
   const { blockIndex, skipped } = useSession();
@@ -40,6 +40,8 @@ function Summary() {
   const state = useSession();
   const { completed, graded, cardsReviewed } = state;
   const [streak, setStreak] = useState<number | null>(null);
+  const [error, setError] = useState('');
+  const meaningful = completed.length > 0;
   const saved = useRef(false);
   const minutes = useRef(sessionMinutes(state)).current;
   const accuracy = graded.total > 0 ? graded.correct / graded.total : 0;
@@ -48,44 +50,73 @@ function Summary() {
     if (saved.current) return;
     saved.current = true;
     const today = dateKey(new Date());
-    void putSession({
+    const record = {
       date: today,
       completedBlocks: completed,
       minutes,
       cardsReviewed,
       accuracy,
-    })
+    };
+    void (meaningful ? putSession(record) : Promise.resolve())
       // The session is finished, so the resume record is no longer wanted.
       .then(endSession)
       .then(getAllSessions)
-      .then((all) => setStreak(currentStreak(all.map((s) => s.date), today)));
-  }, [completed, minutes, cardsReviewed, accuracy]);
+      .then((all) =>
+        setStreak(
+          currentStreak(
+            all.map((s) => s.date),
+            today,
+          ),
+        ),
+      )
+      .catch(() =>
+        setError(
+          'Could not save the session. Your previous progress is unchanged.',
+        ),
+      );
+  }, [completed, minutes, cardsReviewed, accuracy, meaningful]);
 
   return (
     <Card className="mt-8 text-center">
-      <h2 className="mb-6 text-xl font-semibold">Session done</h2>
+      <h2 className="mb-3 text-xl font-semibold">
+        {meaningful
+          ? state.skipped.length > 0
+            ? 'Partial practice saved'
+            : 'Session done'
+          : 'No sections completed'}
+      </h2>
+      <p className="mb-6 text-sm text-zinc-500">
+        {meaningful
+          ? `${completed.length} of ${BLOCKS.length} sections completed.`
+          : 'Skipped sections do not count toward your study streak.'}
+      </p>
+      {error && <p role="alert">{error}</p>}
       <dl className="mb-8 space-y-3 text-left">
         <div className="flex justify-between">
-          <dt className="text-zinc-500">Cards reviewed</dt>
+          <dt className="text-zinc-500">Vocabulary cards reviewed</dt>
           <dd className="font-medium">{cardsReviewed}</dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-zinc-500">Accuracy</dt>
-          <dd className="font-medium">{graded.total > 0 ? `${Math.round(accuracy * 100)}%` : '—'}</dd>
+          <dd className="font-medium">
+            {graded.total > 0 ? `${Math.round(accuracy * 100)}%` : '—'}
+          </dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-zinc-500">Streak</dt>
-          <dd className="font-medium">{streak === null ? '…' : `${streak} days`}</dd>
+          <dd className="font-medium">
+            {streak === null
+              ? '…'
+              : `${streak} ${streak === 1 ? 'day' : 'days'}`}
+          </dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-zinc-500">Minutes</dt>
           <dd className="font-medium">{minutes}</dd>
         </div>
       </dl>
-      <Link to="/" className="block">
-        <Button variant="primary" className="w-full">
-          Back to home
-        </Button>
+      <Link to="/" className="primary-link">
+        Back to home
       </Link>
     </Card>
   );
@@ -107,6 +138,12 @@ export default function SessionShell() {
 
   return (
     <div>
+      <Link
+        to="/more"
+        className="mb-3 inline-flex min-h-11 items-center text-sm text-zinc-500"
+      >
+        ← Exit full session
+      </Link>
       <ProgressRail />
       <div className="mb-3 flex items-center justify-between">
         <h1 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
@@ -116,7 +153,7 @@ export default function SessionShell() {
           onClick={common.onSkip}
           className="min-h-11 rounded-lg px-3 text-sm text-zinc-400"
         >
-          Skip
+          Skip section
         </button>
       </div>
       {block.id === 'kana' && <KanaDrill {...common} />}

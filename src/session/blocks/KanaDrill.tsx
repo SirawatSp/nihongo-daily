@@ -39,16 +39,25 @@ export default function KanaDrill({ onDone }: Props) {
     const isCorrect = optIndex === item.answerIndex;
     if (isCorrect) setCorrect((c) => c + 1);
     void getAllKanaStats().then((stats) =>
-      putKanaStat(recordAnswer(stats.get(item.entry.char), item.entry.char, isCorrect, Date.now())),
+      putKanaStat(
+        recordAnswer(
+          stats.get(item.entry.char),
+          item.entry.char,
+          isCorrect,
+          Date.now(),
+        ),
+      ),
     );
-    window.setTimeout(() => {
+  };
+
+  const next = () => {
+    if (picked === null) return;
+    if (index + 1 >= items.length)
+      onDone('kana', { correct, total: items.length });
+    else {
       setPicked(null);
-      if (index + 1 >= items.length) {
-        onDone('kana', { correct: correct + (isCorrect ? 1 : 0), total: items.length });
-      } else {
-        setIndex((i) => i + 1);
-      }
-    }, 550);
+      setIndex((i) => i + 1);
+    }
   };
 
   return (
@@ -58,7 +67,9 @@ export default function KanaDrill({ onDone }: Props) {
       </p>
       <Card className="mb-6 py-10 text-center">
         <Ja className="text-7xl font-medium">{item.entry.char}</Ja>
-        <p className="mt-3 text-xs uppercase tracking-wide text-zinc-400">{item.entry.script}</p>
+        <p className="mt-3 text-xs uppercase tracking-wide text-zinc-400">
+          {item.entry.script}
+        </p>
       </Card>
       <div className="grid grid-cols-2 gap-3">
         {item.options.map((opt, i) => {
@@ -68,12 +79,28 @@ export default function KanaDrill({ onDone }: Props) {
             else if (i === picked) extra = 'ring-2 ring-red-400 opacity-60';
           }
           return (
-            <Button key={`${opt}-${i}`} onClick={() => answer(i)} className={`py-4 ${extra}`}>
+            <Button
+              key={`${opt}-${i}`}
+              disabled={picked !== null}
+              onClick={() => answer(i)}
+              className={`py-4 ${extra}`}
+            >
               {opt}
             </Button>
           );
         })}
       </div>
+      {picked !== null && (
+        <div className="mt-5 space-y-3">
+          <p role="status">
+            {picked === item.answerIndex ? 'Correct.' : 'Not quite.'}{' '}
+            <Ja>{item.entry.char}</Ja> is {item.options[item.answerIndex]}.
+          </p>
+          <Button variant="primary" className="w-full" onClick={next}>
+            {index + 1 >= items.length ? 'Finish section' : 'Continue'}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
