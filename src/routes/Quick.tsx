@@ -1,13 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import dialoguesRaw from '../data/dialogues.json';
-import type { DialogueEntry } from '../data/schema';
+import { ESSENTIAL_PHRASES } from '../data/trip';
 import {
   buildQuickDeck,
-  confidentCount,
   ratePhrase,
   SCENARIOS,
-  travelPhrases,
   type Phrase,
   type ScenarioId,
 } from '../lib/quick';
@@ -15,8 +12,7 @@ import { getAllPhraseStats, getSettings, putPhraseStat, type PhraseStat } from '
 import { speakJa, ttsAvailable } from '../lib/speech';
 import { Button, Card, Ja } from '../components/ui';
 
-const dialogues = dialoguesRaw as DialogueEntry[];
-const ALL_PHRASES = travelPhrases(dialogues);
+const ALL_PHRASES = ESSENTIAL_PHRASES;
 const DECK_SIZE = 8;
 
 /**
@@ -32,7 +28,7 @@ export default function Quick() {
   const [revealed, setRevealed] = useState(false);
   const [gotCount, setGotCount] = useState(0);
   const [voiceURI, setVoiceURI] = useState<string | null>(null);
-  const [rate, setRate] = useState(1);
+  const [rate, setRate] = useState(0.85);
   const [slow, setSlow] = useState(false);
 
   useEffect(() => {
@@ -90,10 +86,10 @@ export default function Quick() {
       <div>
         <h1 className="mb-1 text-xl font-semibold">Quick practice</h1>
         <p className="mb-1 text-sm text-zinc-500">
-          Three minutes on the phrases you need right now. Pick where you are.
+          Rehearse the beginner phrases from your travel plan. Pick a situation.
         </p>
         <p className="mb-5 text-xs text-zinc-400">
-          {confidentCount(stats)} of {ALL_PHRASES.length} phrases solid
+          {ALL_PHRASES.filter((p) => (stats.get(p.id)?.strength ?? 0) >= 0.7).length} of {ALL_PHRASES.length} phrases recalled confidently
         </p>
         <div className="space-y-2">
           {SCENARIOS.map((s) => (
@@ -126,7 +122,7 @@ export default function Quick() {
       <Card className="mt-8 text-center">
         <h2 className="mb-2 text-xl font-semibold">Done — {label}</h2>
         <p className="mb-6 text-zinc-500">
-          {gotCount} of {deck.length} recalled without help.
+          {gotCount} of {deck.length} recalled without help. Repeat any phrase you needed help with.
         </p>
         <div className="space-y-2">
           <Button variant="primary" className="w-full py-4" onClick={() => begin(scenario)}>
@@ -135,9 +131,7 @@ export default function Quick() {
           <Button className="w-full" onClick={() => setDeck(null)}>
             Another situation
           </Button>
-          <Link to="/" className="block">
-            <Button className="w-full">Home</Button>
-          </Link>
+          <Link to="/" className="secondary-link">Home</Link>
         </div>
       </Card>
     );
@@ -174,6 +168,8 @@ export default function Quick() {
             <p className="mt-2 text-zinc-500">
               <Ja>{phrase.kana}</Ja>
             </p>
+            {phrase.romaji && <p className="pronunciation mt-2">{phrase.romaji}</p>}
+            {phrase.tip && <p className="mt-3 text-sm text-zinc-500">{phrase.tip}</p>}
             {ttsAvailable() && (
               <div className="mt-4 flex justify-center gap-2">
                 <Button onClick={() => speak(phrase.ja)} aria-label="Play audio">
@@ -203,7 +199,7 @@ export default function Quick() {
               if (ttsAvailable()) speak(phrase.ja);
             }}
           >
-            Show me
+            Reveal & compare
           </Button>
         ) : (
           <div className="grid grid-cols-2 gap-2">

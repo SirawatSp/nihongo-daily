@@ -7,7 +7,7 @@
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+    @apply bg-[#f8f6f0] text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
   }
   :lang(ja) {
     line-height: 1.9;
@@ -33,4 +33,69 @@
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-600 dark:text-zinc-300;
+  }
+  .trip-hero {
+    @apply rounded-sm border border-[#d7cdb9] bg-[#ece4d4] p-5 dark:border-zinc-700 dark:bg-zinc-900;
+  }
+  .travel-stamp {
+    @apply flex h-12 w-12 shrink-0 rotate-6 items-center justify-center border-2 border-accent font-display text-lg text-accent dark:border-[#f0b4a6] dark:text-[#f0b4a6];
+  }
+  .lesson-ticket {
+    @apply flex items-center gap-4 rounded-sm border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900;
+  }
+  .ticket-number {
+    @apply border-r border-dashed border-zinc-300 pr-4 font-display text-3xl text-accent dark:border-zinc-600 dark:text-[#f0b4a6];
+  }
+  .primary-link {
+    @apply flex min-h-12 items-center justify-center rounded-xl bg-accent px-4 py-3 text-center font-semibold text-white dark:bg-accent-dark;
+  }
+  .secondary-link {
+    @apply flex min-h-11 items-center justify-center rounded-xl border border-zinc-300 px-4 py-3 text-center font-medium dark:border-zinc-700;
+  }
+  .shortcut-card {
+    @apply rounded-sm border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900;
+  }
+  .pronunciation {
+    @apply font-medium leading-relaxed text-accent dark:text-[#f0b4a6];
+  }
+}
+
+/* Secondary learning text must remain readable in both themes. */
+@layer utilities {
+  .text-zinc-500 {
+    color: #52525b;
+  }
+  .text-zinc-400 {
+    color: #52525b;
+  }
+  .dark .text-zinc-500,
+  .dark .text-zinc-400 {
+    color: #b5b5be;
+  }
+}
+progress {
+  accent-color: #a63e2c;
+}
+progress {
+  appearance: none;
+  overflow: hidden;
+  border: 0;
+  border-radius: 99px;
+  background: #d4d4d8;
+}
+progress::-webkit-progress-bar {
+  background: #d4d4d8;
+}
+progress::-webkit-progress-value {
+  background: #a63e2c;
+  border-radius: 99px;
+}
+progress::-moz-progress-bar {
+  background: #a63e2c;
+  border-radius: 99px;
 }

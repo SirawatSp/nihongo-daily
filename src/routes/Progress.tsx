@@ -7,19 +7,27 @@ import {
   getAllKanaStats,
   getAllKanjiStats,
   getAllSessions,
+  getTripProgress,
+  type TripProgress,
   type KanjiStat,
   type SessionRecord,
 } from '../lib/db';
 import { KANA_TABLE, type KanaStat } from '../lib/kana';
 import { currentStreak, dateKey, lastNDays } from '../lib/streak';
 import { Card } from '../components/ui';
+import { Link } from 'react-router-dom';
+import { TRIP_LESSONS } from '../data/trip';
 
 const vocab = vocabRaw as VocabEntry[];
 const kanjiTotal = (kanjiRaw as unknown[]).length;
 
 function KanaHeatmap({ stats }: { stats: Map<string, KanaStat> }) {
   return (
-    <div className="grid grid-cols-10 gap-1" role="img" aria-label="Per-character kana accuracy">
+    <div
+      className="grid grid-cols-10 gap-1"
+      role="img"
+      aria-label="Per-character kana accuracy"
+    >
       {KANA_TABLE.map((k) => {
         const s = stats.get(k.char);
         const acc = s && s.seen > 0 ? s.correct / s.seen : null;
@@ -35,7 +43,11 @@ function KanaHeatmap({ stats }: { stats: Map<string, KanaStat> }) {
           <span
             key={k.char}
             lang="ja"
-            title={s ? `${k.char}: ${Math.round((acc ?? 0) * 100)}% of ${s.seen}` : `${k.char}: unseen`}
+            title={
+              s
+                ? `${k.char}: ${Math.round((acc ?? 0) * 100)}% of ${s.seen}`
+                : `${k.char}: unseen`
+            }
             className={`flex aspect-square items-center justify-center rounded text-sm ${bg}`}
           >
             {k.char}
@@ -50,13 +62,19 @@ function StreakCalendar({ sessions }: { sessions: SessionRecord[] }) {
   const days = lastNDays(dateKey(new Date()), 30);
   const done = new Set(sessions.map((s) => s.date));
   return (
-    <div className="grid grid-cols-10 gap-1" role="img" aria-label="Last 30 days of sessions">
+    <div
+      className="grid grid-cols-10 gap-1"
+      role="img"
+      aria-label="Last 30 days of sessions"
+    >
       {days.map((d) => (
         <span
           key={d}
           title={d}
           className={`aspect-square rounded ${
-            done.has(d) ? 'bg-accent dark:bg-accent-dark' : 'bg-zinc-100 dark:bg-zinc-800'
+            done.has(d)
+              ? 'bg-accent dark:bg-accent-dark'
+              : 'bg-zinc-100 dark:bg-zinc-800'
           }`}
         />
       ))}
@@ -65,9 +83,15 @@ function StreakCalendar({ sessions }: { sessions: SessionRecord[] }) {
 }
 
 function AccuracyTrend({ sessions }: { sessions: SessionRecord[] }) {
-  const recent = [...sessions].sort((a, b) => a.date.localeCompare(b.date)).slice(-14);
+  const recent = [...sessions]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(-14);
   if (recent.length < 2) {
-    return <p className="text-sm text-zinc-500">Complete a few sessions to see the trend.</p>;
+    return (
+      <p className="text-sm text-zinc-500">
+        Complete a few sessions to see the trend.
+      </p>
+    );
   }
   const w = 280;
   const h = 60;
@@ -99,8 +123,11 @@ function AccuracyTrend({ sessions }: { sessions: SessionRecord[] }) {
 export default function Progress() {
   const [cards, setCards] = useState({ known: 0, learning: 0, fresh: 0 });
   const [kanaStats, setKanaStats] = useState<Map<string, KanaStat>>(new Map());
-  const [kanjiStats, setKanjiStats] = useState<Map<string, KanjiStat>>(new Map());
+  const [kanjiStats, setKanjiStats] = useState<Map<string, KanjiStat>>(
+    new Map(),
+  );
   const [sessions, setSessions] = useState<SessionRecord[]>([]);
+  const [trip, setTrip] = useState<TripProgress[]>([]);
 
   useEffect(() => {
     void getAllCards().then((all) => {
@@ -114,18 +141,51 @@ export default function Progress() {
     void getAllKanaStats().then(setKanaStats);
     void getAllKanjiStats().then(setKanjiStats);
     void getAllSessions().then(setSessions);
+    void getTripProgress().then(setTrip);
   }, []);
 
   const kanjiWritten = [...kanjiStats.values()].filter((s) => s.completed > 0);
   const kanjiSolid = kanjiWritten.filter((s) => s.recent >= 0.85).length;
 
-  const streak = currentStreak(sessions.map((s) => s.date), dateKey(new Date()));
+  const streak = currentStreak(
+    sessions.map((s) => s.date),
+    dateKey(new Date()),
+  );
 
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-semibold">Progress</h1>
       <Card>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-400">Vocab</h2>
+        <h2 className="mb-3 font-display text-2xl">Ready for your trip</h2>
+        <p className="mb-3 text-sm text-zinc-500">
+          {trip.filter((p) => p.completedAt).length} of 14 lessons practised.
+          Recall is self-rated; completion is not a fluency score.
+        </p>
+        <ul className="space-y-3">
+          {TRIP_LESSONS.map((l) => {
+            const p = trip.find((x) => x.id === l.id);
+            return (
+              <li key={l.id}>
+                <Link to={`/trip/${l.id}`} className="block min-h-11">
+                  <span className="font-medium">{l.title} →</span>
+                  <span className="block text-xs text-zinc-500">
+                    {p?.completedAt
+                      ? `${p.recalled}/3 recalled · reply ${p.listeningCorrect ? 'understood' : 'needs review'}`
+                      : p && p.step > 0
+                        ? 'In progress'
+                        : 'Not practised yet'}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </Card>
+      <h2 className="eyebrow">Extra study</h2>
+      <Card>
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-400">
+          Vocab
+        </h2>
         <div className="flex justify-around text-center">
           <div>
             <p className="text-2xl font-semibold">{cards.known}</p>
@@ -151,11 +211,15 @@ export default function Progress() {
             <p className="text-xs text-zinc-500">solid</p>
           </div>
           <div>
-            <p className="text-2xl font-semibold">{kanjiWritten.length - kanjiSolid}</p>
+            <p className="text-2xl font-semibold">
+              {kanjiWritten.length - kanjiSolid}
+            </p>
             <p className="text-xs text-zinc-500">shaky</p>
           </div>
           <div>
-            <p className="text-2xl font-semibold">{kanjiTotal - kanjiWritten.length}</p>
+            <p className="text-2xl font-semibold">
+              {kanjiTotal - kanjiWritten.length}
+            </p>
             <p className="text-xs text-zinc-500">unwritten</p>
           </div>
         </div>

@@ -1,20 +1,25 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import Home from './routes/Home';
-import Session from './routes/Session';
 import Phrasebook from './routes/Phrasebook';
-import Progress from './routes/Progress';
-import Grammar from './routes/Grammar';
-import Kanji from './routes/Kanji';
 import Quick from './routes/Quick';
 import Settings from './routes/Settings';
+import More from './routes/More';
+import TripLesson from './routes/TripLesson';
 import UpdateToast from './components/UpdateToast';
 import { getSettings } from './lib/db';
+
+// The optional handwriting data should not delay the beginner course.
+const Session = lazy(() => import('./routes/Session'));
+const Kanji = lazy(() => import('./routes/Kanji'));
+const Progress = lazy(() => import('./routes/Progress'));
+const Grammar = lazy(() => import('./routes/Grammar'));
 
 export function applyTheme(theme: 'system' | 'light' | 'dark') {
   const dark =
     theme === 'dark' ||
-    (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    (theme === 'system' &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.classList.toggle('dark', dark);
   try {
     if (theme === 'system') localStorage.removeItem('nihongo-theme');
@@ -26,18 +31,20 @@ export function applyTheme(theme: 'system' | 'light' | 'dark') {
 
 const tabs = [
   { to: '/', label: 'Today', icon: '☀️' },
-  { to: '/quick', label: 'Quick', icon: '⚡' },
-  { to: '/kanji', label: 'Kanji', icon: '✍️' },
+  { to: '/quick', label: 'Practice', icon: '⚡' },
   { to: '/phrasebook', label: 'Phrases', icon: '💬' },
-  { to: '/grammar', label: 'Grammar', icon: '📖' },
-  { to: '/progress', label: 'Progress', icon: '📊' },
-  { to: '/settings', label: 'Settings', icon: '⚙️' },
+  { to: '/more', label: 'More', icon: '☰' },
 ];
 
 export default function App() {
   const location = useLocation();
-  const inSession = location.pathname === '/session';
+  const inSession =
+    location.pathname === '/session' || location.pathname.startsWith('/trip/');
   const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [location.pathname]);
 
   useEffect(() => {
     getSettings()
@@ -50,17 +57,24 @@ export default function App() {
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col">
       <main className="flex-1 px-4 pb-24 pt-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/session" element={<Session />} />
-          <Route path="/phrasebook" element={<Phrasebook />} />
-          <Route path="/progress" element={<Progress />} />
-          <Route path="/grammar" element={<Grammar />} />
-          <Route path="/kanji" element={<Kanji />} />
-          <Route path="/quick" element={<Quick />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="*" element={<Home />} />
-        </Routes>
+        <Suspense fallback={<p role="status">Loading…</p>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/session" element={<Session />} />
+            <Route path="/phrasebook" element={<Phrasebook />} />
+            <Route path="/progress" element={<Progress />} />
+            <Route path="/grammar" element={<Grammar />} />
+            <Route path="/kanji" element={<Kanji />} />
+            <Route path="/quick" element={<Quick />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/more" element={<More />} />
+            <Route
+              path="/trip/:id"
+              element={<TripLesson key={location.pathname} />}
+            />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </Suspense>
       </main>
       {!inSession && (
         <nav
@@ -75,7 +89,11 @@ export default function App() {
                 end={t.to === '/'}
                 className={({ isActive }) =>
                   `flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-xs ${
-                    isActive
+                    isActive ||
+                    (t.to === '/more' &&
+                      ['/grammar', '/kanji', '/progress', '/settings'].includes(
+                        location.pathname,
+                      ))
                       ? 'font-semibold text-accent dark:text-accent-dark'
                       : 'text-zinc-500 dark:text-zinc-400'
                   }`

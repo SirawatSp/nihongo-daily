@@ -41,6 +41,15 @@ export interface PhraseStat {
   lastSeen: number;
 }
 
+/** A checkpoint after each travel-course exercise, not just each lesson. */
+export interface TripProgress {
+  id: string;
+  step: number;
+  recalled: number;
+  listeningCorrect: boolean | null;
+  completedAt?: string;
+}
+
 /**
  * A session that was started but not finished. Persisted so closing the app
  * part-way through resumes where you left off instead of restarting.
@@ -57,6 +66,7 @@ export interface ActiveSession {
 }
 
 export interface Settings {
+  tripDepartureDate: string;
   newCardsPerDay: number;
   voiceURI: string | null;
   speechRate: number;
@@ -71,6 +81,7 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
+  tripDepartureDate: '2026-10-22',
   newCardsPerDay: 10,
   voiceURI: null,
   speechRate: 1,
@@ -90,10 +101,11 @@ interface NihongoDB extends DBSchema {
   favorites: { key: string; value: Favorite };
   activeSession: { key: string; value: ActiveSession };
   phraseStats: { key: string; value: PhraseStat };
+  tripProgress: { key: string; value: TripProgress };
 }
 
 export const DB_NAME = 'nihongo-daily';
-export const DB_VERSION = 4;
+export const DB_VERSION = 5;
 
 let dbPromise: Promise<IDBPDatabase<NihongoDB>> | null = null;
 
@@ -122,6 +134,9 @@ function migrate(db: IDBPDatabase<NihongoDB>, oldVersion: number): void {
   if (oldVersion < 4) {
     // Quick Practice phrase recall. Additive.
     db.createObjectStore('phraseStats', { keyPath: 'id' });
+  }
+  if (oldVersion < 5) {
+    db.createObjectStore('tripProgress', { keyPath: 'id' });
   }
 }
 
@@ -203,6 +218,13 @@ export async function getAllPhraseStats(): Promise<Map<string, PhraseStat>> {
   return new Map(all.map((s) => [s.id, s]));
 }
 
+export async function getTripProgress(): Promise<TripProgress[]> {
+  return (await getDb()).getAll('tripProgress');
+}
+export async function putTripProgress(progress: TripProgress): Promise<void> {
+  await (await getDb()).put('tripProgress', progress);
+}
+
 export async function putPhraseStat(stat: PhraseStat): Promise<void> {
   await (await getDb()).put('phraseStats', stat);
 }
@@ -256,6 +278,7 @@ export interface ExportedData {
   kanjiStats?: KanjiStat[];
   /** Added in v4; absent in older backups. */
   phraseStats?: PhraseStat[];
+  tripProgress?: TripProgress[];
   sessions: SessionRecord[];
   settings: Settings;
   favorites: Favorite[];
@@ -270,6 +293,7 @@ export async function exportAll(): Promise<ExportedData> {
     kanaStats: await db.getAll('kanaStats'),
     kanjiStats: await db.getAll('kanjiStats'),
     phraseStats: await db.getAll('phraseStats'),
+    tripProgress: await db.getAll('tripProgress'),
     sessions: await db.getAll('sessions'),
     settings: await getSettings(),
     favorites: await db.getAll('favorites'),
@@ -279,7 +303,7 @@ export async function exportAll(): Promise<ExportedData> {
 export async function importAll(data: ExportedData): Promise<void> {
   const db = await getDb();
   const tx = db.transaction(
-    ['cards', 'kanaStats', 'kanjiStats', 'phraseStats', 'sessions', 'settings', 'favorites'],
+    ['cards', 'kanaStats', 'kanjiStats', 'phraseStats', 'tripProgress', 'sessions', 'settings', 'favorites'],
     'readwrite',
   );
   await Promise.all([
@@ -287,6 +311,7 @@ export async function importAll(data: ExportedData): Promise<void> {
     tx.objectStore('kanaStats').clear(),
     tx.objectStore('kanjiStats').clear(),
     tx.objectStore('phraseStats').clear(),
+    tx.objectStore('tripProgress').clear(),
     tx.objectStore('sessions').clear(),
     tx.objectStore('favorites').clear(),
   ]);
@@ -294,6 +319,7 @@ export async function importAll(data: ExportedData): Promise<void> {
   for (const k of data.kanaStats) void tx.objectStore('kanaStats').put(k);
   for (const k of data.kanjiStats ?? []) void tx.objectStore('kanjiStats').put(k);
   for (const p of data.phraseStats ?? []) void tx.objectStore('phraseStats').put(p);
+  for (const p of data.tripProgress ?? []) void tx.objectStore('tripProgress').put(p);
   for (const s of data.sessions) void tx.objectStore('sessions').put(s);
   for (const f of data.favorites) void tx.objectStore('favorites').put(f);
   void tx.objectStore('settings').put({ ...DEFAULT_SETTINGS, ...data.settings }, 'app');

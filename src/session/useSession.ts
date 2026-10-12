@@ -57,11 +57,14 @@ const initial = {
 };
 
 /** Total minutes spent, counting the stretch currently in progress. */
-export function sessionMinutes(state: {
-  elapsedMs: number;
-  tickAt: number;
-  active: boolean;
-}, now = Date.now()): number {
+export function sessionMinutes(
+  state: {
+    elapsedMs: number;
+    tickAt: number;
+    active: boolean;
+  },
+  now = Date.now(),
+): number {
   const live = state.active && state.tickAt > 0 ? now - state.tickAt : 0;
   return Math.max(1, Math.round((state.elapsedMs + live) / 60000));
 }
@@ -88,7 +91,14 @@ export const useSession = create<SessionStore>((set) => ({
       const now = Date.now();
       return {
         blockIndex: s.blockIndex + 1,
-        completed: [...s.completed, id],
+        completed:
+          result.total > 0 || (result.cards ?? 0) > 0 || id === 'speaking'
+            ? [...s.completed, id]
+            : s.completed,
+        skipped:
+          result.total === 0 && (result.cards ?? 0) === 0 && id !== 'speaking'
+            ? [...s.skipped, id]
+            : s.skipped,
         graded: {
           correct: s.graded.correct + result.correct,
           total: s.graded.total + result.total,
@@ -128,7 +138,8 @@ useSession.subscribe((state) => {
     skipped: state.skipped,
     graded: state.graded,
     cardsReviewed: state.cardsReviewed,
-    elapsedMs: state.elapsedMs + (state.tickAt > 0 ? Date.now() - state.tickAt : 0),
+    elapsedMs:
+      state.elapsedMs + (state.tickAt > 0 ? Date.now() - state.tickAt : 0),
   });
 });
 

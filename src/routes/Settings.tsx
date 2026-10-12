@@ -36,7 +36,9 @@ export default function Settings() {
 
   const doExport = async () => {
     const data = await exportAll();
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: 'application/json',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -56,13 +58,34 @@ export default function Settings() {
       setSettings(await getSettings());
       setMessage('Progress imported. Your previous state is restored.');
     } catch (e) {
-      setMessage(`Import failed: ${e instanceof Error ? e.message : 'invalid file'}`);
+      setMessage(
+        `Import failed: ${e instanceof Error ? e.message : 'invalid file'}`,
+      );
     }
   };
 
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-semibold">Settings</h1>
+
+      <Card>
+        <label htmlFor="trip-date" className="mb-2 block font-medium">
+          Departure date
+        </label>
+        <input
+          id="trip-date"
+          type="date"
+          value={settings.tripDepartureDate}
+          onChange={(e) => {
+            if (e.target.value) update({ tripDepartureDate: e.target.value });
+          }}
+          className="min-h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 dark:border-zinc-700 dark:bg-zinc-900"
+        />
+        <p className="mt-2 text-sm text-zinc-500">
+          Your home screen counts down to this date. The lessons stay available
+          during your trip.
+        </p>
+      </Card>
 
       <Card>
         <label htmlFor="new-cards" className="mb-1 block font-medium">
@@ -75,7 +98,9 @@ export default function Settings() {
           min={0}
           max={50}
           value={settings.newCardsPerDay}
-          onChange={(e) => update({ newCardsPerDay: Math.max(0, Number(e.target.value) || 0) })}
+          onChange={(e) =>
+            update({ newCardsPerDay: Math.max(0, Number(e.target.value) || 0) })
+          }
           className="w-24 rounded-xl border border-zinc-200 bg-white px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
         />
       </Card>
@@ -115,7 +140,8 @@ export default function Settings() {
           </>
         ) : (
           <p className="text-sm text-zinc-500">
-            Speech synthesis is not available in this browser, so audio features are hidden.
+            Speech synthesis is not available in this browser, so audio features
+            are hidden.
           </p>
         )}
       </Card>
@@ -132,7 +158,12 @@ export default function Settings() {
           max={20}
           value={settings.kanjiPerSession}
           onChange={(e) =>
-            update({ kanjiPerSession: Math.min(20, Math.max(1, Number(e.target.value) || 1)) })
+            update({
+              kanjiPerSession: Math.min(
+                20,
+                Math.max(1, Number(e.target.value) || 1),
+              ),
+            })
           }
           className="mb-4 w-24 rounded-xl border border-zinc-200 bg-white px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
         />
@@ -221,8 +252,9 @@ export default function Settings() {
       </Card>
 
       <p className="px-2 text-xs text-zinc-400">
-        Speech recognition works in Chrome and Edge; it is unavailable or unreliable on iOS Safari.
-        Everything else works fully offline.
+        Speech recognition works in Chrome and Edge; it is unavailable or
+        unreliable on iOS Safari. Lessons and progress work offline after the
+        first load. Offline audio requires an installed Japanese voice.
       </p>
 
       <p className="px-2 pb-2 text-xs text-zinc-400">
